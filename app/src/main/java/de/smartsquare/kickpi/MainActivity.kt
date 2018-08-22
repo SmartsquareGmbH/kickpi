@@ -2,29 +2,23 @@ package de.smartsquare.kickpi
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
-import android.widget.TextView
-import com.google.android.things.pio.Gpio
+import com.google.android.things.pio.Gpio.DIRECTION_IN
 import com.google.android.things.pio.PeripheralManager
 
 class MainActivity : Activity() {
-
-    private val gpio = PeripheralManager.getInstance().openGpio("BCM23")
-    private val callback = GoalCallback()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
-        gpio.setDirection(Gpio.DIRECTION_IN)
-        gpio.registerGpioCallback(callback)
-    }
+        val gpioForLeftGoal = PeripheralManager.getInstance().openGpio("BCM23")
+        gpioForLeftGoal.setDirection(DIRECTION_IN)
+        gpioForLeftGoal.registerGpioCallback(GoalCallback("Left Goal"))
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        gpio.unregisterGpioCallback(callback)
+        val gpioForRightGoal = PeripheralManager.getInstance().openGpio("BCM24")
+        gpioForRightGoal.setDirection(DIRECTION_IN)
+        gpioForRightGoal.registerGpioCallback(GoalCallback("Right Goal"))
     }
 
 }
