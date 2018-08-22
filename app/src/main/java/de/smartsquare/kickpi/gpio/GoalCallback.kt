@@ -1,16 +1,20 @@
-package de.smartsquare.kickpi
+package de.smartsquare.kickpi.gpio
 
 import android.util.Log
+import android.widget.TextView
 import com.google.android.things.pio.Gpio
 import com.google.android.things.pio.GpioCallback
+import de.smartsquare.kickpi.MainActivity
+import de.smartsquare.kickpi.R
+import kotlinx.android.synthetic.main.activity_main.view.*
 
-class GoalCallback(private val name: String) : GpioCallback {
+class GoalCallback(private val name: String, private val activity: MainActivity) : GpioCallback {
 
     override fun onGpioEdge(gpio: Gpio?): Boolean {
-        Log.i(name, "triggered")
         Log.i(name, gpio?.value.toString())
         return true;
     }
+
     override fun onGpioError(gpio: Gpio?, error: Int) {
         Log.i("", error.toString())
     }

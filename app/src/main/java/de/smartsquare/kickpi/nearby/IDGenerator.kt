@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi
+package de.smartsquare.kickpi.nearby
 
 interface IDGenerator {
 
