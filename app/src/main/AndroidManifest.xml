@@ -7,6 +7,10 @@
     <application>
         <uses-library android:name="com.google.android.things" />
 
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="AIzaSyAEdanH_AkiR8XDBQQWg5faKlzb7vi8rjA" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
