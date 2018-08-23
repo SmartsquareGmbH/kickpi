@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class GPIOManager @Inject constructor(private val peripheralManager: PeripheralManager) {
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onGameStartEvent(startGameEvent: StartGameEvent) {
         val leftGoal = peripheralManager.openGpio("BCM23")
         Log.i("GPIO Manager", "Register callback for GPIO BCM23")
