@@ -30,4 +30,6 @@ class ActivityModule(private val context: Context) {
     @Provides
     fun nearbyMessageClient() = Nearby.getMessagesClient(context)
 
+    @Provides
+    fun activityContext() = context
 }
