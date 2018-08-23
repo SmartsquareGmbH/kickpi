@@ -10,12 +10,14 @@ import de.smartsquare.kickpi.ioc.DaggerContainer
 import de.smartsquare.kickpi.nearby.NearbyManager
 import kotlinx.android.synthetic.main.activity_main.*
 import nl.dionsegijn.konfetti.KonfettiView
-import nl.dionsegijn.konfetti.models.Shape
+import nl.dionsegijn.konfetti.models.Shape.RECT
+import nl.dionsegijn.konfetti.models.Shape.CIRCLE
 import nl.dionsegijn.konfetti.models.Size
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 class MainActivity : Activity() {
+
 
     @Inject
     lateinit var gpioManager: GPIOManager
@@ -36,11 +38,9 @@ class MainActivity : Activity() {
         EventBus.getDefault().register(nearbyManager)
         EventBus.getDefault().register(httpManager)
         EventBus.getDefault().post(StartIdleEvent())
-
-        confetto()
     }
 
-    fun confetto(){
+    fun confetto() {
         val confettiContainer = findViewById<KonfettiView>(R.id.viewKonfetti)
 
         confettiContainer.build()
@@ -49,7 +49,7 @@ class MainActivity : Activity() {
                 .setSpeed(3f, 8f)
                 .setFadeOutEnabled(true)
                 .setTimeToLive(10000)
-                .addShapes(Shape.RECT, Shape.CIRCLE)
+                .addShapes(RECT, CIRCLE)
                 .addSizes(Size(10))
                 .setPosition(viewKonfetti.width - 0f, viewKonfetti.height - 0f)
                 .stream(100, 5000L)
