@@ -7,16 +7,8 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
-class NearbyManager @Inject constructor() {
-
-    @Inject
-    lateinit var nearby: MessagesClient
-
-    @Inject
-    lateinit var idGenerator: UniqueAndroidIDGenerator
-
-    @Inject
-    lateinit var startGameMessageListener: StartGameMessageListener
+class NearbyManager @Inject constructor(private val nearby: MessagesClient, private val idGenerator: UniqueAndroidIDGenerator,
+                                        private val startGameMessageListener: StartGameMessageListener) {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     fun onStartIdleEvent(startIdleEvent: StartIdleEvent) {

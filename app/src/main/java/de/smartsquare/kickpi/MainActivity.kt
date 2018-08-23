@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import com.google.android.things.pio.PeripheralManager
 import de.smartsquare.kickpi.gpio.GPIOManager
+import de.smartsquare.kickpi.http.HTTPManager
 import de.smartsquare.kickpi.ioc.ActivityModule
 import de.smartsquare.kickpi.ioc.DaggerContainer
 import de.smartsquare.kickpi.nearby.NearbyManager
@@ -19,7 +20,8 @@ class MainActivity : Activity() {
     @Inject
     lateinit var nearbyManager: NearbyManager
 
-
+    @Inject
+    lateinit var httpManager: HTTPManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +31,7 @@ class MainActivity : Activity() {
 
         EventBus.getDefault().register(gpioManager)
         EventBus.getDefault().register(nearbyManager)
+        EventBus.getDefault().register(httpManager)
         EventBus.getDefault().post(StartIdleEvent())
     }
 }

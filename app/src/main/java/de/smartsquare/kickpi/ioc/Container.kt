@@ -5,7 +5,7 @@ import de.smartsquare.kickpi.MainActivity
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [HTTPModule::class, GPIOModule::class, ActivityModule::class])
+@Component(modules = [GPIOModule::class, ActivityModule::class])
 interface Container {
 
     fun inject(app: MainActivity)

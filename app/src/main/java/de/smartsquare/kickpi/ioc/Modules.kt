@@ -5,7 +5,9 @@ import com.google.android.gms.nearby.Nearby
 import com.google.android.things.pio.PeripheralManager
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
+import de.smartsquare.kickpi.nearby.UniqueAndroidIDGenerator
+import okhttp3.OkHttpClient
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -14,14 +16,6 @@ class GPIOModule {
     @Provides
     @Singleton
     fun peripheralManager(): PeripheralManager = PeripheralManager.getInstance()
-}
-
-@Module
-class HTTPModule {
-
-    @Provides
-    @Singleton
-    fun kickwayRetrofitClient(): Retrofit = Retrofit.Builder().build()
 }
 
 @Module

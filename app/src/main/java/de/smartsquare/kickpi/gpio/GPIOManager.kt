@@ -6,10 +6,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
-class GPIOManager @Inject constructor() {
-
-    @Inject
-    lateinit var peripheralManager: PeripheralManager
+class GPIOManager @Inject constructor(private val peripheralManager: PeripheralManager) {
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     fun onGameStartEvent(startGameEvent: StartGameEvent) {

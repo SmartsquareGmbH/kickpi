@@ -5,10 +5,7 @@ import android.content.Context
 import android.provider.Settings
 import javax.inject.Inject
 
-class UniqueAndroidIDGenerator @Inject constructor() {
-
-    @Inject
-    lateinit var context: Context
+class UniqueAndroidIDGenerator @Inject constructor(private val context: Context) {
 
     @SuppressLint("HardwareIds")
     fun generate(): String = Settings.Secure.getString(context.applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
