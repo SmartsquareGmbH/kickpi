@@ -9,7 +9,6 @@ import de.smartsquare.kickpi.gpio.GoalCallback
 import de.smartsquare.kickpi.nearby.IdleMessage
 import de.smartsquare.kickpi.nearby.StartGameMessageListener
 
-
 class MainActivity : Activity() {
 
     val peripheralManager = PeripheralManager.getInstance()
@@ -33,5 +32,4 @@ class MainActivity : Activity() {
         gpio.setDirection(DIRECTION_IN)
         gpio.registerGpioCallback(GoalCallback("Left Goal", this))
     }
-
 }

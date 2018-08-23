@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 
 @JsonClass(generateAdapter = true)
-class StartGameMessage(val kickwayURL : String) {
+class StartGameMessage(val kickwayURL: String) {
 
     companion object {
 
