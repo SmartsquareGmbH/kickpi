@@ -4,7 +4,6 @@ import com.google.android.gms.nearby.messages.Message
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import okhttp3.HttpUrl
-import java.net.URL
 
 @JsonClass(generateAdapter = true)
 class StartGameMessage(val scoreLeft: HttpUrl, val scoreRight: HttpUrl, val spectate: HttpUrl) {
