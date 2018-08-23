@@ -6,7 +6,7 @@ import com.google.android.gms.nearby.Nearby
 import com.google.android.things.pio.Gpio.DIRECTION_IN
 import com.google.android.things.pio.PeripheralManager
 import de.smartsquare.kickpi.gpio.GoalCallback
-import de.smartsquare.kickpi.ioc.Context
+import de.smartsquare.kickpi.ioc.Kickchain
 import de.smartsquare.kickpi.ioc.DaggerContainer
 import de.smartsquare.kickpi.nearby.IdleMessage
 import de.smartsquare.kickpi.nearby.StartGameMessageListener
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class MainActivity : Activity() {
 
     @Inject
-    lateinit var context: Context
+    lateinit var kickchain: Kickchain
 
     @Inject
     lateinit var peripheralManager: PeripheralManager
@@ -32,11 +32,11 @@ class MainActivity : Activity() {
         messageClient.subscribe(
                 StartGameMessageListener(messageStartedCallback = {
                     messageClient.unpublish(idle)
-                }, context = context)
+                }, kickchain = kickchain)
         )
 
         val gpio = peripheralManager.openGpio("BCM23")
         gpio.setDirection(DIRECTION_IN)
-        gpio.registerGpioCallback(GoalCallback("Left Goal", this))
+        gpio.registerGpioCallback(GoalCallback("Left Goal"))
     }
 }
