@@ -3,11 +3,10 @@ package de.smartsquare.kickpi.http
 import android.util.Log
 import de.smartsquare.kickpi.GoalEvent
 import de.smartsquare.kickpi.nearby.UniqueAndroidIDGenerator
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.io.IOException
 import javax.inject.Inject
 
 class HTTPManager @Inject constructor(idGenerator: UniqueAndroidIDGenerator) {
@@ -24,6 +23,6 @@ class HTTPManager @Inject constructor(idGenerator: UniqueAndroidIDGenerator) {
                 .patch(RequestBody.create(null, byteArrayOf()))
                 .build()
                 .let { httpClient.newCall(it) }
-                .also { it.execute() }
+                .enqueue(HTTPCallback())
     }
 }
