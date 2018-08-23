@@ -1,11 +1,15 @@
 package de.smartsquare.kickpi.nearby
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.Context
 import android.provider.Settings
+import javax.inject.Inject
 
-class UniqueAndroidIDGenerator(private val activity: Activity) : IDGenerator {
+class UniqueAndroidIDGenerator @Inject constructor() {
+
+    @Inject
+    lateinit var context: Context
 
     @SuppressLint("HardwareIds")
-    override fun generate(): String = Settings.Secure.getString(activity.applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
+    fun generate(): String = Settings.Secure.getString(context.applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
 }

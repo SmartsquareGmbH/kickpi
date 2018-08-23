@@ -1,18 +1,12 @@
 package de.smartsquare.kickpi.gpio
 
-import android.util.Log
 import com.google.android.things.pio.Gpio
 import com.google.android.things.pio.GpioCallback
-import de.smartsquare.kickpi.MainActivity
+import okhttp3.HttpUrl
 
-class GoalCallback(private val name: String) : GpioCallback {
+class GoalCallback(private val score: HttpUrl) : GpioCallback {
 
     override fun onGpioEdge(gpio: Gpio?): Boolean {
-        Log.i(name, gpio?.value.toString())
         return true
-    }
-
-    override fun onGpioError(gpio: Gpio?, error: Int) {
-        Log.i("", error.toString())
     }
 }

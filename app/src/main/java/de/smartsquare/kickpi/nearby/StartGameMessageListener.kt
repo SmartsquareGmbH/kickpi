@@ -2,17 +2,19 @@ package de.smartsquare.kickpi.nearby
 
 import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
-import de.smartsquare.kickpi.ioc.Kickchain
+import de.smartsquare.kickpi.StartGameEvent
+import org.greenrobot.eventbus.EventBus
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class StartGameMessageListener(private val kickchain: Kickchain, private val messageStartedCallback: () -> Unit) : MessageListener() {
+@Singleton
+class StartGameMessageListener @Inject constructor() : MessageListener() {
 
     override fun onFound(message: Message?) {
         message?.let {
             StartGameMessage.fromNearbyMessage(it)
         }?.let {
-            kickchain.startGame(it.scoreLeft,  it.scoreRight, it.spectate)
-        }.also {
-            messageStartedCallback.invoke()
+            EventBus.getDefault().post(StartGameEvent(it))
         }
     }
 }
