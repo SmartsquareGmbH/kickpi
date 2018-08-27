@@ -9,7 +9,6 @@ import com.google.android.gms.nearby.messages.MessagesClient
 import com.google.android.gms.nearby.messages.SubscribeOptions
 import de.smartsquare.kickpi.create.CreateLobbyUseCase
 import de.smartsquare.kickpi.idle.IdleUseCase
-import de.smartsquare.kickpi.idle.StartIdleEvent
 import de.smartsquare.kickpi.join.JoinLobbyUseCase
 import de.smartsquare.kickpi.play.during.ScoreUseCase
 import kotlinx.android.synthetic.main.activity_main.viewKonfetti
@@ -47,10 +46,11 @@ class MainActivity : Activity() {
 
         eventBus.register(scoreUseCase)
         eventBus.register(idleUseCase)
-        eventBus.post(StartIdleEvent())
 
         messagesClient.subscribeOnType(joinlobbyUseCase, "JOIN_LOBBY")
         messagesClient.subscribeOnType(createLobbyUseCase, "CREATE_LOBBY")
+
+        idleUseCase.publishIdleMessage()
     }
 
     fun confetto() {
