@@ -3,7 +3,10 @@ package de.smartsquare.kickpi
 import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
+import com.google.android.gms.nearby.messages.MessageFilter
+import com.google.android.gms.nearby.messages.MessageListener
 import com.google.android.gms.nearby.messages.MessagesClient
+import com.google.android.gms.nearby.messages.SubscribeOptions
 import de.smartsquare.kickpi.create.CreateLobbyUseCase
 import de.smartsquare.kickpi.idle.IdleUseCase
 import de.smartsquare.kickpi.idle.StartIdleEvent
@@ -27,6 +30,15 @@ class MainActivity : Activity() {
 
     @Inject lateinit var eventBus: EventBus
 
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun MessagesClient.subscribeOnType(listener: MessageListener, type: String) {
+        MessageFilter.Builder().includeNamespacedType("de.smartsquare.kickpi", type).build()
+            .let { SubscribeOptions.Builder().setFilter(it).build() }
+            .also {
+                this.subscribe(listener, it)
+            }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,8 +49,8 @@ class MainActivity : Activity() {
         eventBus.register(idleUseCase)
         eventBus.post(StartIdleEvent())
 
-        messagesClient.subscribe(createLobbyUseCase)
-        messagesClient.subscribe(joinlobbyUseCase)
+        messagesClient.subscribeOnType(joinlobbyUseCase, "JOIN_LOBBY")
+        messagesClient.subscribeOnType(createLobbyUseCase, "CREATE_LOBBY")
     }
 
     fun confetto() {

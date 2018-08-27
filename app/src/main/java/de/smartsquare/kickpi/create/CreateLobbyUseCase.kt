@@ -13,8 +13,6 @@ class CreateLobbyUseCase @Inject constructor(
 ) : MessageListener() {
 
     override fun onFound(message: Message) {
-        if (message.type != "CREATE_LOBBY") return
-
         val createLobbyMessage = fromNearby(message, CreateLobbyMessage::class.java)
         val credentials = Credentials(createLobbyMessage.ownerDeviceId, createLobbyMessage.ownerName)
         val authorized = authorizationService.authorize(credentials).execute().isSuccessful
