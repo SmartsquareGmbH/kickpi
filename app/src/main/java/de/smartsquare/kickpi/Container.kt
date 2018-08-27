@@ -1,10 +1,11 @@
 package de.smartsquare.kickpi
 
-import android.app.Activity
 import dagger.Component
+import javax.inject.Singleton
 
-@Component
+@Singleton
+@Component(modules = [GPIOModule::class, ActivityModule::class, HTTPModule::class])
 interface Container {
 
-    fun inject(app: Activity)
+    fun inject(app: MainActivity)
 }
