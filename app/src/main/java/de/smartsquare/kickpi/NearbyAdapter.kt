@@ -14,7 +14,7 @@ class NearbyAdapter {
         }
 
         fun toNearby(message: Any, type: String): Message {
-            val json = Moshi.Builder().build().adapter(message.javaClass).toJson(this)
+            val json = Moshi.Builder().build().adapter(message.javaClass).toJson(message)
 
             return Message(json.toByteArray(), type)
         }

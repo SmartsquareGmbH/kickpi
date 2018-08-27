@@ -5,7 +5,6 @@ import com.google.android.gms.nearby.Nearby
 import com.google.android.things.pio.PeripheralManager
 import dagger.Module
 import dagger.Provides
-import de.smartsquare.kickpi.create.AuthorizationService
 import de.smartsquare.kickpi.play.finish.GameService
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
@@ -39,7 +38,7 @@ class HTTPModule {
     fun createLobbyAuthorizationService() = Retrofit.Builder()
         .baseUrl("https://mysterious-dusk-56126.herokuapp.com/")
         .build()
-        .create(de.smartsquare.kickpi.create.AuthorizationService::class.java)
+        .create(de.smartsquare.kickpi.create.AuthorizationInterface::class.java)
 
     @Provides
     fun joinLobbyAuthorizationService() = Retrofit.Builder()
