@@ -6,9 +6,9 @@ import com.google.android.gms.nearby.messages.MessageListener
 import de.smartsquare.kickpi.DuplicateNameException
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
+import de.smartsquare.kickpi.TeamAlreadyFullException
 import de.smartsquare.kickpi.UnauthorizedException
 import de.smartsquare.kickpi.join.JoinLobbyMessage.Team.LEFT
-import de.smartsquare.kickpi.join.JoinLobbyMessage.Team.RIGHT
 import de.smartsquare.kickpi.removeStickyModifiedLobbyEvent
 import de.smartsquare.kickpi.throwIllegalArgumentExceptionIfBlank
 import org.greenrobot.eventbus.EventBus
@@ -37,16 +37,19 @@ class JoinLobbyUseCase @Inject constructor(
     }
 
     private fun joinLobby(joinLobbyMessage: JoinLobbyMessage, it: Lobby): Lobby {
-        if (joinLobbyMessage.team == LEFT && it.leftTeam.contains(joinLobbyMessage.playerName))
-            throw DuplicateNameException()
-        if (joinLobbyMessage.team == RIGHT && it.rightTeam.contains(joinLobbyMessage.playerName))
-            throw DuplicateNameException()
-
-        Log.i(TAG, "${joinLobbyMessage.playerName} joined")
         return if (joinLobbyMessage.team == LEFT) {
+            throwExceptionIfFullOrAlreadyJoined(joinLobbyMessage.playerName, it.leftTeam)
             it.copy(leftTeam = it.leftTeam + joinLobbyMessage.playerName)
         } else {
+            throwExceptionIfFullOrAlreadyJoined(joinLobbyMessage.playerName, it.rightTeam)
             it.copy(rightTeam = it.rightTeam + joinLobbyMessage.playerName)
+        }.also {
+            Log.i(TAG, "${joinLobbyMessage.playerName} joined")
         }
+    }
+
+    private fun throwExceptionIfFullOrAlreadyJoined(player: String, players: List<String>) {
+        if (players.contains(player)) throw DuplicateNameException()
+        if (players.size > 1) throw TeamAlreadyFullException()
     }
 }
