@@ -36,16 +36,10 @@ class ActivityModule(private val context: Context) {
 class HTTPModule {
 
     @Provides
-    fun createLobbyAuthorizationService() = Retrofit.Builder()
-        .baseUrl(KICKWAY_URL)
-        .build()
-        .create(de.smartsquare.kickpi.create.AuthorizationInterface::class.java)
-
-    @Provides
     fun joinLobbyAuthorizationService() = Retrofit.Builder()
         .baseUrl(KICKWAY_URL)
         .build()
-        .create(de.smartsquare.kickpi.join.AuthorizationInterface::class.java)
+        .create(AuthorizationInterface::class.java)
 
     @Provides
     fun gameService() = Retrofit.Builder()

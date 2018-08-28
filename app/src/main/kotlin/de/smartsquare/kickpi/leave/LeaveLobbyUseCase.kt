@@ -3,12 +3,10 @@ package de.smartsquare.kickpi.leave
 import android.util.Log
 import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
+import de.smartsquare.kickpi.AuthorizationService
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
-import de.smartsquare.kickpi.UnauthorizedException
 import de.smartsquare.kickpi.getLastModifiedLobby
-import de.smartsquare.kickpi.join.AuthorizationService
-import de.smartsquare.kickpi.join.Credentials
 import de.smartsquare.kickpi.removeStickyModifiedLobbyEvent
 import de.smartsquare.kickpi.throwIllegalArgumentExceptionIfBlank
 import org.greenrobot.eventbus.EventBus
@@ -24,11 +22,11 @@ class LeaveLobbyUseCase @Inject constructor(
     override fun onFound(message: Message) {
         val leaveLobbyMessage = NearbyAdapter.fromNearby(message, LeaveLobbyMessage::class.java)
 
-        leaveLobbyMessage.playerName.throwIllegalArgumentExceptionIfBlank()
-        leaveLobbyMessage.playerDeviceId.throwIllegalArgumentExceptionIfBlank()
-
-        val credentials = Credentials(leaveLobbyMessage.playerDeviceId, leaveLobbyMessage.playerName)
-        if (authorizationService.isAuthorized(credentials).not()) throw UnauthorizedException()
+        with(leaveLobbyMessage) {
+            this.playerName.throwIllegalArgumentExceptionIfBlank()
+            this.playerDeviceId.throwIllegalArgumentExceptionIfBlank()
+            authorizationService.authorize(this.playerName, this.playerDeviceId)
+        }
 
         eventBus.getLastModifiedLobby()?.also {
             val playerName = leaveLobbyMessage.playerName

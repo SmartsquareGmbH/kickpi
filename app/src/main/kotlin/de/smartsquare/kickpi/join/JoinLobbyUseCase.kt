@@ -3,11 +3,11 @@ package de.smartsquare.kickpi.join
 import android.util.Log
 import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
+import de.smartsquare.kickpi.AuthorizationService
 import de.smartsquare.kickpi.DuplicateNameException
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.TeamAlreadyFullException
-import de.smartsquare.kickpi.UnauthorizedException
 import de.smartsquare.kickpi.join.JoinLobbyMessage.Team.LEFT
 import de.smartsquare.kickpi.removeStickyModifiedLobbyEvent
 import de.smartsquare.kickpi.throwIllegalArgumentExceptionIfBlank
@@ -24,11 +24,11 @@ class JoinLobbyUseCase @Inject constructor(
     override fun onFound(message: Message) {
         val joinLobbyMessage = NearbyAdapter.fromNearby(message, JoinLobbyMessage::class.java)
 
-        joinLobbyMessage.playerName.throwIllegalArgumentExceptionIfBlank()
-        joinLobbyMessage.playerDeviceId.throwIllegalArgumentExceptionIfBlank()
-
-        val credentials = Credentials(joinLobbyMessage.playerDeviceId, joinLobbyMessage.playerName)
-        if (authorizationService.isAuthorized(credentials).not()) throw UnauthorizedException()
+        with(joinLobbyMessage) {
+            this.playerName.throwIllegalArgumentExceptionIfBlank()
+            this.playerDeviceId.throwIllegalArgumentExceptionIfBlank()
+            authorizationService.authorize(this.playerName, this.playerDeviceId)
+        }
 
         eventBus.removeStickyModifiedLobbyEvent()?.also {
             val lobbyWithNewPlayer = joinLobby(joinLobbyMessage, it)

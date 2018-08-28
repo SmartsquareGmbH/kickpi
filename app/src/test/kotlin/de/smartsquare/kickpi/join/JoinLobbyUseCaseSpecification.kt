@@ -1,5 +1,6 @@
 package de.smartsquare.kickpi.join
 
+import de.smartsquare.kickpi.AuthorizationService
 import de.smartsquare.kickpi.DuplicateNameException
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
@@ -22,11 +23,10 @@ import org.junit.jupiter.api.Test
 class JoinLobbyUseCaseSpecification {
 
     private val eventBus = EventBus.getDefault()
-    private val authorizationService = mockk<AuthorizationService>()
+    private val authorizationService = mockk<AuthorizationService>(relaxed = true)
     private val joinLobbyUseCase = JoinLobbyUseCase(authorizationService, eventBus)
 
-    @BeforeEach fun setup() {
-        every { authorizationService.isAuthorized(any()) } returns true
+    @BeforeEach fun cleanupEventBus() {
         eventBus.removeAllStickyEvents()
     }
 
@@ -95,7 +95,7 @@ class JoinLobbyUseCaseSpecification {
     }
 
     @Test fun `unauthorized join attempt should throw a exception`() {
-        every { authorizationService.isAuthorized(any()) } returns false
+        every { authorizationService.authorize(any(), any()) } throws UnauthorizedException()
         eventBus.postSticky(NewPlayerJoinedEvent(Lobby("deen")))
 
         val joinLobbyMessage = JoinLobbyMessage("deen", "1337", LEFT)

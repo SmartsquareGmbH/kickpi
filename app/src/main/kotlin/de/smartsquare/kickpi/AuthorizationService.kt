@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.create
+package de.smartsquare.kickpi
 
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -9,7 +9,12 @@ import javax.inject.Inject
 
 class AuthorizationService @Inject constructor(private val authorizationInterface: AuthorizationInterface) {
 
-    fun isAuthorized(credentials: Credentials) = authorizationInterface.authorize(credentials).execute().isSuccessful
+    fun authorize(name: String, deviceId: String) {
+        val credentials = Credentials(deviceId, name)
+        val authorizationResponse = authorizationInterface.authorize(credentials).execute()
+
+        if (authorizationResponse.isSuccessful.not()) throw UnauthorizedException()
+    }
 }
 
 interface AuthorizationInterface {

@@ -1,10 +1,10 @@
 package de.smartsquare.kickpi.leave
 
+import de.smartsquare.kickpi.AuthorizationService
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.UnauthorizedException
 import de.smartsquare.kickpi.create.LobbyCreatedEvent
-import de.smartsquare.kickpi.join.AuthorizationService
 import de.smartsquare.kickpi.join.NewPlayerJoinedEvent
 import de.smartsquare.kickpi.removeStickyModifiedLobbyEvent
 import io.mockk.every
@@ -19,12 +19,11 @@ import org.junit.jupiter.api.Test
 class LeaveLobbyUseCaseSpecification {
 
     private val eventBus = EventBus.getDefault()
-    private val authorizationService = mockk<AuthorizationService>()
+    private val authorizationService = mockk<AuthorizationService>(relaxed = true)
     private val leaveLobbyUseCase = LeaveLobbyUseCase(authorizationService, eventBus)
 
-    @BeforeEach fun setup() {
+    @BeforeEach fun cleanupEventBus() {
         eventBus.removeAllStickyEvents()
-        every { authorizationService.isAuthorized(any()) } returns true
     }
 
     @Test fun `leave lobby`() {
@@ -76,7 +75,7 @@ class LeaveLobbyUseCaseSpecification {
     }
 
     @Test fun `unauthorized attempt to leave lobby`() {
-        every { authorizationService.isAuthorized(any()) } returns false
+        every { authorizationService.authorize(any(), any()) } throws UnauthorizedException()
         eventBus.postSticky(LobbyCreatedEvent(Lobby("deen")))
 
         val leaveLobbyMessage = LeaveLobbyMessage("deen", "1337")

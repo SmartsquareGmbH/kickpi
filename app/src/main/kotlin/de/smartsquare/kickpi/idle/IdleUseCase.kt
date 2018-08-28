@@ -5,6 +5,7 @@ import com.google.android.gms.nearby.messages.MessagesClient
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.create.LobbyCreatedEvent
 import de.smartsquare.kickpi.leave.GameCanceledEvent
+import de.smartsquare.kickpi.play.start.GameStartedEvent
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
@@ -28,6 +29,15 @@ class IdleUseCase @Inject constructor(private val messagesClient: MessagesClient
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     fun publishIdleMessageOnGameCanceledEvent(gameCanceledEvent: GameCanceledEvent) {
-        publishIdleMessage()
+        val idleMessage = NearbyAdapter.toNearby(InIdleBroadcast(), "IDLE")
+        messagesClient.publish(idleMessage)
+        Log.i(TAG, "Broadcast idle state")
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    fun unpublishIdleMessageOnGameStartedEvent(gameStartedEvent: GameStartedEvent) {
+        val idleMessage = NearbyAdapter.toNearby(InIdleBroadcast(), "IDLE")
+        messagesClient.unpublish(idleMessage)
+        Log.i(TAG, "Unpublish idle broadcast")
     }
 }
