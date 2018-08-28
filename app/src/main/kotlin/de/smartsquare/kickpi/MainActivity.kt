@@ -10,7 +10,6 @@ import com.google.android.gms.nearby.messages.SubscribeOptions
 import de.smartsquare.kickpi.create.CreateLobbyUseCase
 import de.smartsquare.kickpi.idle.IdleUseCase
 import de.smartsquare.kickpi.join.JoinLobbyUseCase
-import de.smartsquare.kickpi.play.during.ScoreUseCase
 import kotlinx.android.synthetic.main.activity_main.viewKonfetti
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape.CIRCLE
@@ -22,7 +21,6 @@ import javax.inject.Inject
 class MainActivity : Activity() {
 
     @Inject lateinit var idleUseCase: IdleUseCase
-    @Inject lateinit var scoreUseCase: ScoreUseCase
     @Inject lateinit var messagesClient: MessagesClient
     @Inject lateinit var joinlobbyUseCase: JoinLobbyUseCase
     @Inject lateinit var createLobbyUseCase: CreateLobbyUseCase
@@ -44,7 +42,6 @@ class MainActivity : Activity() {
 
         DaggerContainer.builder().activityModule(ActivityModule(this)).build().inject(this)
 
-        eventBus.register(scoreUseCase)
         eventBus.register(idleUseCase)
 
         messagesClient.subscribeOnType(joinlobbyUseCase, "JOIN_LOBBY")

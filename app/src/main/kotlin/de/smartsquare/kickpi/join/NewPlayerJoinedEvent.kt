@@ -1,5 +1,6 @@
 package de.smartsquare.kickpi.join
 
 import de.smartsquare.kickpi.Lobby
+import de.smartsquare.kickpi.LobbyModificationEvent
 
-data class NewPlayerJoinedEvent(val lobby: Lobby)
+class NewPlayerJoinedEvent(lobby: Lobby) : LobbyModificationEvent(lobby)

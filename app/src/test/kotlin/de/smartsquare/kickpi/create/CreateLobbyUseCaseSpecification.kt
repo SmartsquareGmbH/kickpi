@@ -16,8 +16,7 @@ class CreateLobbyUseCaseSpecification {
     private val messagesClient = mockk<MessagesClient>(relaxed = true)
     private val createLobbyUseCase = CreateLobbyUseCase(authorizationService, eventBus, messagesClient)
 
-    @Test
-    fun `publish sticky LobbyCreatedEvent if authorization was successful`() {
+    @Test fun `publish sticky LobbyCreatedEvent if authorization was successful`() {
         every { authorizationService.isAuthorized(allAny()) } returns true
 
         val createLobbyMessage = CreateLobbyMessage("deen", "1337")
@@ -27,8 +26,7 @@ class CreateLobbyUseCaseSpecification {
         lobbyCreatedEvent.lobby.owner shouldBeEqualTo "deen"
     }
 
-    @Test
-    fun `broadcast in lobby creation state`() {
+    @Test fun `broadcast in lobby creation state`() {
         every { authorizationService.isAuthorized(allAny()) } returns true
 
         val createLobbyMessage = CreateLobbyMessage("deen", "1337")

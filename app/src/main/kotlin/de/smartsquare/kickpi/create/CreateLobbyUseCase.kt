@@ -1,5 +1,6 @@
 package de.smartsquare.kickpi.create
 
+import android.util.Log
 import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
 import com.google.android.gms.nearby.messages.MessagesClient
@@ -15,6 +16,8 @@ class CreateLobbyUseCase @Inject constructor(
     private val messagesClient: MessagesClient
 ) : MessageListener() {
 
+    private val TAG = "Create Lobby"
+
     override fun onFound(message: Message) {
         val createLobbyMessage = fromNearby(message, CreateLobbyMessage::class.java)
         val credentials = Credentials(createLobbyMessage.ownerDeviceId, createLobbyMessage.ownerName)
@@ -22,8 +25,10 @@ class CreateLobbyUseCase @Inject constructor(
 
         val lobby = Lobby(createLobbyMessage.ownerName)
         eventBus.postSticky(LobbyCreatedEvent(lobby))
+        Log.i(TAG, "Post LobbyCreatedEvent for lobby: $lobby")
 
         val inLobbyCreationBroadcast = InLobbyCreationBroadcast(lobby)
         messagesClient.publish(NearbyAdapter.toNearby(inLobbyCreationBroadcast, "LOBBY_CREATION"))
+        Log.i(TAG, "Broadcast in lobby creation state")
     }
 }

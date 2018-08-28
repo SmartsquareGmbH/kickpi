@@ -22,13 +22,11 @@ class JoinLobbyUseCaseSpecification {
     private val authorizationService = mockk<AuthorizationService>()
     private val joinLobbyUseCase = JoinLobbyUseCase(authorizationService, eventBus)
 
-    @BeforeEach
-    fun cleanupEventBus() {
+    @BeforeEach fun cleanupEventBus() {
         eventBus.removeAllStickyEvents()
     }
 
-    @Test
-    fun `publish NewPlayerJoinedEvent after joining a created lobby`() {
+    @Test fun `publish NewPlayerJoinedEvent after joining a created lobby`() {
         every { authorizationService.isAuthorized(any()) } returns true
         eventBus.postSticky(LobbyCreatedEvent(Lobby("deen")))
 
@@ -41,8 +39,7 @@ class JoinLobbyUseCaseSpecification {
         newPlayerJoinedEvent.lobby.leftTeam shouldContain "saschar"
     }
 
-    @Test
-    fun `publish NewPlayerJoinedEvent after joining a existent lobby`() {
+    @Test fun `publish NewPlayerJoinedEvent after joining a existent lobby`() {
         every { authorizationService.isAuthorized(any()) } returns true
         eventBus.postSticky(NewPlayerJoinedEvent(Lobby("deen")))
 
@@ -55,8 +52,7 @@ class JoinLobbyUseCaseSpecification {
         newPlayerJoinedEvent.lobby.leftTeam shouldContain "saschar"
     }
 
-    @Test
-    fun `unpublish created lobby after joining`() {
+    @Test fun `unpublish created lobby after joining`() {
         every { authorizationService.isAuthorized(any()) } returns true
         eventBus.postSticky(LobbyCreatedEvent(Lobby("deen")))
 
@@ -67,8 +63,7 @@ class JoinLobbyUseCaseSpecification {
         eventBus.getStickyEvent(LobbyCreatedEvent::class.java) shouldEqual null
     }
 
-    @Test
-    fun `join lobby with a duplicated name should throw a exception`() {
+    @Test fun `join lobby with a duplicated name should throw a exception`() {
         every { authorizationService.isAuthorized(any()) } returns true
         eventBus.postSticky(NewPlayerJoinedEvent(Lobby("deen")))
 
@@ -79,8 +74,7 @@ class JoinLobbyUseCaseSpecification {
         joinLobbyFunction shouldThrow DuplicateNameException::class
     }
 
-    @Test
-    fun `join lobby with a empty name should throw a exception`() {
+    @Test fun `join lobby with a empty name should throw a exception`() {
         every { authorizationService.isAuthorized(any()) } returns true
         eventBus.postSticky(NewPlayerJoinedEvent(Lobby("deen")))
 
@@ -91,8 +85,7 @@ class JoinLobbyUseCaseSpecification {
         joinLobbyFunction shouldThrow IllegalArgumentException::class
     }
 
-    @Test
-    fun `join lobby with a empty device id should throw a exception`() {
+    @Test fun `join lobby with a empty device id should throw a exception`() {
         every { authorizationService.isAuthorized(any()) } returns true
         eventBus.postSticky(NewPlayerJoinedEvent(Lobby("deen")))
 
@@ -103,8 +96,7 @@ class JoinLobbyUseCaseSpecification {
         joinLobbyFunction shouldThrow IllegalArgumentException::class
     }
 
-    @Test
-    fun `unauthorized join attempt should throw a exception`() {
+    @Test fun `unauthorized join attempt should throw a exception`() {
         every { authorizationService.isAuthorized(any()) } returns false
         eventBus.postSticky(NewPlayerJoinedEvent(Lobby("deen")))
 
@@ -115,8 +107,7 @@ class JoinLobbyUseCaseSpecification {
         joinLobbyFunction shouldThrow UnauthorizedException::class
     }
 
-    @Test
-    fun `join lobby after someone leaved`() {
+    @Test fun `join lobby after someone leaved`() {
         every { authorizationService.isAuthorized(any()) } returns true
         eventBus.postSticky(PlayerLeavedEvent(Lobby("deen")))
 

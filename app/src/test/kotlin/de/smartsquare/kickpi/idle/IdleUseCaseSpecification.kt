@@ -11,8 +11,7 @@ class IdleUseCaseSpecification {
     val messagesClient = mockk<MessagesClient>(relaxed = true)
     val idleUseCase = IdleUseCase(messagesClient)
 
-    @Test
-    fun `unpublish idle message on lobby created event`() {
+    @Test fun `unpublish idle message on lobby created event`() {
         idleUseCase.unpublishIdleMessageOnLobbyCreatedEvent(mockk<LobbyCreatedEvent>())
 
         verify { messagesClient.unpublish(any()) }
