@@ -9,6 +9,7 @@ import de.smartsquare.kickpi.UnauthorizedException
 import de.smartsquare.kickpi.create.LobbyCreatedEvent
 import de.smartsquare.kickpi.join.JoinLobbyMessage.Team.LEFT
 import de.smartsquare.kickpi.join.JoinLobbyMessage.Team.RIGHT
+import de.smartsquare.kickpi.leave.PlayerLeavedEvent
 import de.smartsquare.kickpi.throwIllegalArgumentExceptionIfBlank
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -32,6 +33,10 @@ class JoinLobbyUseCase @Inject constructor(
             eventBus.postSticky(NewPlayerJoinedEvent(lobbyWithNewPlayer))
         }
         eventBus.removeStickyEvent(LobbyCreatedEvent::class.java)?.also {
+            val lobbyWithNewPlayer = joinLobby(joinLobbyMessage, it.lobby)
+            eventBus.postSticky(NewPlayerJoinedEvent(lobbyWithNewPlayer))
+        }
+        eventBus.removeStickyEvent(PlayerLeavedEvent::class.java)?.also {
             val lobbyWithNewPlayer = joinLobby(joinLobbyMessage, it.lobby)
             eventBus.postSticky(NewPlayerJoinedEvent(lobbyWithNewPlayer))
         }

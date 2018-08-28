@@ -5,6 +5,7 @@ import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.UnauthorizedException
 import de.smartsquare.kickpi.create.LobbyCreatedEvent
+import de.smartsquare.kickpi.leave.PlayerLeavedEvent
 import io.mockk.every
 import io.mockk.mockk
 import org.amshove.kluent.shouldContain
@@ -103,7 +104,7 @@ class JoinLobbyUseCaseSpecification {
     }
 
     @Test
-    fun `unauthorized join attempt should throw e exception`() {
+    fun `unauthorized join attempt should throw a exception`() {
         every { authorizationService.isAuthorized(any()) } returns false
         eventBus.postSticky(NewPlayerJoinedEvent(Lobby("deen")))
 
@@ -112,5 +113,19 @@ class JoinLobbyUseCaseSpecification {
         val joinLobbyFunction = { joinLobbyUseCase.onFound(nearbyJoinLobbyMessage) }
 
         joinLobbyFunction shouldThrow UnauthorizedException::class
+    }
+
+    @Test
+    fun `join lobby after someone leaved`() {
+        every { authorizationService.isAuthorized(any()) } returns true
+        eventBus.postSticky(PlayerLeavedEvent(Lobby("deen")))
+
+        val joinLobbyMessage = JoinLobbyMessage("saschar", "1337", JoinLobbyMessage.Team.LEFT)
+        val nearbyJoinLobbyMessage = NearbyAdapter.toNearby(joinLobbyMessage, "JOIN_LOBBY")
+        joinLobbyUseCase.onFound(nearbyJoinLobbyMessage)
+
+        val newPlayerJoinedEvent = eventBus.removeStickyEvent(NewPlayerJoinedEvent::class.java)
+        newPlayerJoinedEvent shouldNotEqual null
+        newPlayerJoinedEvent.lobby.leftTeam shouldContain "saschar"
     }
 }
