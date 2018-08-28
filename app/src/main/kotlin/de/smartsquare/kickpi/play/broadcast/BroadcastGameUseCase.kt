@@ -1,5 +1,6 @@
 package de.smartsquare.kickpi.play.broadcast
 
+import android.util.Log
 import com.google.android.gms.nearby.messages.MessagesClient
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.play.score.GoalScoredEvent
@@ -10,6 +11,8 @@ import javax.inject.Inject
 
 class BroadcastGameUseCase @Inject constructor(private val messagesClient: MessagesClient) {
 
+    private val TAG = "Broadcast Game"
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND, sticky = true)
     fun broadcastGameOnStart(gameStartedEvent: GameStartedEvent) {
         val lobby = gameStartedEvent.lobby
@@ -17,6 +20,7 @@ class BroadcastGameUseCase @Inject constructor(private val messagesClient: Messa
         val nearbyBroadcast = NearbyAdapter.toNearby(broadcast, "IN_GAME")
 
         messagesClient.publish(nearbyBroadcast)
+        Log.i(TAG, "Broadcast started game for $lobby")
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND, sticky = true)
@@ -26,5 +30,7 @@ class BroadcastGameUseCase @Inject constructor(private val messagesClient: Messa
         val nearbyBroadcast = NearbyAdapter.toNearby(broadcast, "IN_GAME")
 
         messagesClient.publish(nearbyBroadcast)
+        Log.i(TAG, "Broadcast idle state")
+        Log.i(TAG, "Broadcast scored goal in $lobby")
     }
 }
