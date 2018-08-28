@@ -2,6 +2,10 @@
 
 package de.smartsquare.kickpi
 
+import com.google.android.gms.nearby.messages.MessageFilter
+import com.google.android.gms.nearby.messages.MessageListener
+import com.google.android.gms.nearby.messages.MessagesClient
+import com.google.android.gms.nearby.messages.SubscribeOptions
 import de.smartsquare.kickpi.create.LobbyCreatedEvent
 import de.smartsquare.kickpi.join.NewPlayerJoinedEvent
 import de.smartsquare.kickpi.leave.PlayerLeavedEvent
@@ -28,3 +32,11 @@ inline fun EventBus.getLastModifiedLobby() =
     ).map { this.getStickyEvent(it) }
         .findLast { it != null }
         ?.lobby
+
+inline fun MessagesClient.subscribeOnType(listener: MessageListener, type: String) {
+    MessageFilter.Builder().includeNamespacedType("de.smartsquare.kickpi", type).build()
+        .let { SubscribeOptions.Builder().setFilter(it).build() }
+        .also {
+            this.subscribe(listener, it)
+        }
+}

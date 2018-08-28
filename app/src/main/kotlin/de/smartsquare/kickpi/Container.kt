@@ -7,5 +7,5 @@ import javax.inject.Singleton
 @Component(modules = [GPIOModule::class, ActivityModule::class, HTTPModule::class])
 interface Container {
 
-    fun inject(app: MainActivity)
+    fun inject(app: MainApplication)
 }
