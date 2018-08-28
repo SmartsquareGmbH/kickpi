@@ -44,7 +44,7 @@ class HTTPModule {
     fun joinLobbyAuthorizationService() = Retrofit.Builder()
         .baseUrl("https://mysterious-dusk-56126.herokuapp.com/")
         .build()
-        .create(de.smartsquare.kickpi.join.AuthorizationService::class.java)
+        .create(de.smartsquare.kickpi.join.AuthorizationInterface::class.java)
 
     @Provides
     fun gameService() = Retrofit.Builder()
