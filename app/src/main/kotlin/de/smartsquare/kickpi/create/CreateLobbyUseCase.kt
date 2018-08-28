@@ -54,5 +54,4 @@ class CreateLobbyUseCase @Inject constructor(
             GoalScoredEvent::class.java
         ).map { this.getStickyEvent(it) }
             .any { it != null }
-
 }
