@@ -1,5 +1,5 @@
-apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply plugin: "com.github.ben-manes.versions"
+apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.android.application'
@@ -18,8 +18,13 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField "String", "KICKWAY_URL", "\"${getFromSecrets("KICKWAY_URL")}\""
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "KICKWAY_URL", "\"${getFromSecrets("KICKWAY_URL")}\""
         }
     }
     testOptions {
@@ -76,4 +81,31 @@ ktlint {
 
 gradle.projectsEvaluated {
     check.dependsOn detektCheck
+}
+
+static String getFromSecrets(String key) {
+    if (isCI()) {
+        return 'dummy'
+    }
+
+    Properties result = new Properties()
+
+    try {
+        result.load(new FileInputStream(new File("secrets.properties")))
+    } catch (Exception ignored) {
+        throw new GradleException("Please add a secrets.properties file with a value for $key to perform this action.")
+    }
+
+    if (!result.containsKey(key)) {
+        throw new GradleException("Please include a value for $key in your secrets.properties " +
+                "file to perform this action.")
+    }
+
+    return result[key]
+}
+
+static boolean isCI() {
+    Object isCI = System.getenv('CI')
+
+    return isCI != null && isCI.toBoolean()
 }
