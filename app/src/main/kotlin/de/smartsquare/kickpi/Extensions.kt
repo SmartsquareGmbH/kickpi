@@ -34,7 +34,7 @@ inline fun EventBus.getLastModifiedLobby() =
         ?.lobby
 
 inline fun MessagesClient.subscribeOnType(listener: MessageListener, type: String) {
-    MessageFilter.Builder().includeNamespacedType("de.smartsquare.kickpi", type).build()
+    MessageFilter.Builder().includeNamespacedType("", type).build()
         .let { SubscribeOptions.Builder().setFilter(it).build() }
         .also {
             this.subscribe(listener, it)
