@@ -25,6 +25,10 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
 }
 
 dependencies {
@@ -36,6 +40,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-nearby:15.0.1'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 
+    kapt 'com.google.dagger:dagger-android-processor:2.15'
     kapt 'com.google.dagger:dagger-compiler:2.17'
     implementation 'com.google.dagger:dagger:2.17'
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'

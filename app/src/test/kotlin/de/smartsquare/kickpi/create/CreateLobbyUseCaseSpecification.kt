@@ -9,7 +9,6 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.greenrobot.eventbus.EventBus
 import org.junit.Test
 
-
 class CreateLobbyUseCaseSpecification {
 
     private val eventBus = EventBus.getDefault()
