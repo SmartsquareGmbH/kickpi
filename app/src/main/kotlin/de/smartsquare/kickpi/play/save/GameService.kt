@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.play.finish
+package de.smartsquare.kickpi.play.save
 
 import okhttp3.ResponseBody
 import retrofit2.Call

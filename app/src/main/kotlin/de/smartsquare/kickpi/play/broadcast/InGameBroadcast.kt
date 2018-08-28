@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.play.during
+package de.smartsquare.kickpi.play.broadcast
 
 import com.squareup.moshi.JsonClass
 import de.smartsquare.kickpi.Lobby

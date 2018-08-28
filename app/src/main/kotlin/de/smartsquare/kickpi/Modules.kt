@@ -6,7 +6,7 @@ import com.google.android.things.pio.PeripheralManager
 import dagger.Module
 import dagger.Provides
 import de.smartsquare.kickpi.BuildConfig.KICKWAY_URL
-import de.smartsquare.kickpi.play.finish.GameService
+import de.smartsquare.kickpi.play.save.GameService
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
 import javax.inject.Singleton

@@ -6,10 +6,10 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
 
-class IdleUseCaseSpecification {
+class BroadcastIdleUseCaseSpecification {
 
     val messagesClient = mockk<MessagesClient>(relaxed = true)
-    val idleUseCase = IdleUseCase(messagesClient)
+    val idleUseCase = BroadcastIdleUseCase(messagesClient)
 
     @Test fun `unpublish idle message on lobby created event`() {
         idleUseCase.unpublishIdleMessageOnLobbyCreatedEvent(mockk<LobbyCreatedEvent>())

@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.play.during
+package de.smartsquare.kickpi.play.score
 
 import de.smartsquare.kickpi.Lobby
 

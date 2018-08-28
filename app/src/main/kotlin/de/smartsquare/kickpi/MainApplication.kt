@@ -3,14 +3,14 @@ package de.smartsquare.kickpi
 import android.app.Application
 import com.google.android.gms.nearby.messages.MessagesClient
 import de.smartsquare.kickpi.create.CreateLobbyUseCase
-import de.smartsquare.kickpi.idle.IdleUseCase
+import de.smartsquare.kickpi.idle.BroadcastIdleUseCase
 import de.smartsquare.kickpi.join.JoinLobbyUseCase
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 class MainApplication : Application() {
 
-    @Inject lateinit var idleUseCase: IdleUseCase
+    @Inject lateinit var broadcastIdleUseCase: BroadcastIdleUseCase
     @Inject lateinit var messagesClient: MessagesClient
     @Inject lateinit var joinlobbyUseCase: JoinLobbyUseCase
     @Inject lateinit var createLobbyUseCase: CreateLobbyUseCase
@@ -25,11 +25,11 @@ class MainApplication : Application() {
             .build()
             .inject(this)
 
-        eventBus.register(idleUseCase)
+        eventBus.register(broadcastIdleUseCase)
 
         messagesClient.subscribeOnType(joinlobbyUseCase, "JOIN_LOBBY")
         messagesClient.subscribeOnType(createLobbyUseCase, "CREATE_LOBBY")
 
-        idleUseCase.publishIdleMessage()
+        broadcastIdleUseCase.publishIdleMessage()
     }
 }

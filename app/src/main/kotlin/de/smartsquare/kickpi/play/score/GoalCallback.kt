@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.play.during
+package de.smartsquare.kickpi.play.score
 
 import android.util.Log
 import com.google.android.things.pio.Gpio
