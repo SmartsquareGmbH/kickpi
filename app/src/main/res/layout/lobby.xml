@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/idleheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="serif-monospace"
+            android:shadowColor="@android:color/white"
+            android:text="KickPi"
+            android:textColor="@android:color/black"
+            android:textSize="192sp"
+            android:typeface="serif" />
+
+        <TextView
+            android:id="@+id/idletext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif-monospace"
+            android:shadowColor="@android:color/black"
+            android:text="Waiting for players to connect ..."
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="36sp"
+            android:typeface="serif" />
+
+    </LinearLayout>
+
+</FrameLayout>
