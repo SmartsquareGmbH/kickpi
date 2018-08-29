@@ -54,4 +54,17 @@ class GoalCallbackSpecification {
         eventBus.getStickyEvent(GoalScoredEvent::class.java) shouldEqual null
         eventBus.getStickyEvent(GameFinishedEvent::class.java) shouldNotEqual null
     }
+
+    @Test fun `debouncing 5 seconds`() {
+        eventBus.postSticky(GoalScoredEvent(lobby.copy(scoreRightTeam = 8)))
+
+        with(GoalCallback(eventBus) { it.copy(scoreRightTeam = it.scoreRightTeam + 1) }) {
+            onGpioEdge(mockk(relaxed = true))
+            onGpioEdge(mockk(relaxed = true))
+        }
+
+        val goalScoredEvent = eventBus.getStickyEvent(GoalScoredEvent::class.java)
+        goalScoredEvent shouldNotEqual null
+        goalScoredEvent.lobby.scoreRightTeam shouldEqualTo 9
+    }
 }

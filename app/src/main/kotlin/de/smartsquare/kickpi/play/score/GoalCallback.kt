@@ -13,9 +13,15 @@ class GoalCallback(
 ) : GpioCallback {
 
     private val TAG = "GPIO Callback"
+    private var lastGoal: Long = System.currentTimeMillis() - 5000
 
     override fun onGpioEdge(gpio: Gpio?): Boolean {
-        Log.i(TAG, "${gpio?.name} changed the state to ${gpio?.value}")
+        if (System.currentTimeMillis() - lastGoal < 5000) {
+            Log.i(TAG, "Goals must be at least 5 seconds apart but was ${System.currentTimeMillis() - lastGoal}ms")
+            return true
+        } else {
+            lastGoal = System.currentTimeMillis()
+        }
 
         eventBus.removeStickyModifiedGameEvent()
             ?.let(goalFunction)
