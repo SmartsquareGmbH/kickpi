@@ -10,48 +10,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/scoreLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="serif-monospace"
-            android:shadowColor="@android:color/black"
-            android:text="8"
-            android:textColor="@android:color/holo_red_light"
-            android:textSize="384sp"
-            android:typeface="serif" />
-
-        <TextView
-            android:id="@+id/scoreColon"
+            android:id="@+id/idleheader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:fontFamily="serif-monospace"
             android:shadowColor="@android:color/white"
-            android:text=":"
+            android:text="KickPi"
             android:textColor="@android:color/black"
             android:textSize="192sp"
             android:typeface="serif" />
 
         <TextView
-            android:id="@+id/scoreRight"
+            android:id="@+id/idletext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="serif-monospace"
             android:shadowColor="@android:color/black"
-            android:text="9"
-            android:textColor="@android:color/holo_blue_light"
-            android:textSize="384sp"
+            android:text="Come and play with me :ˆ)"
+            android:textColor="@android:color/holo_red_light"
+            android:textSize="36sp"
             android:typeface="serif" />
 
     </LinearLayout>
-
-    <nl.dionsegijn.konfetti.KonfettiView
-        android:id="@+id/viewKonfetti"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:theme="@android:style/Theme.Translucent" />
 
 </FrameLayout>
