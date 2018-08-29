@@ -17,11 +17,17 @@ class GoalCallback(
     override fun onGpioEdge(gpio: Gpio?): Boolean {
         Log.i(TAG, "${gpio?.name} changed the state to ${gpio?.value}")
 
-        return eventBus.removeStickyModifiedGameEvent()
-            .let(goalFunction)
-            .let(::GoalScoredEvent)
-            .let(eventBus::postSticky)
+        eventBus.removeStickyModifiedGameEvent()
+            ?.let(goalFunction)
+            ?.let {
+                when {
+                    it.scoreLeftTeam == 10 || it.scoreRightTeam == 10 -> GameFinishedEvent(it)
+                    else -> GoalScoredEvent(it)
+                }
+            }
+            .also(eventBus::postSticky)
             .also { Log.i(TAG, "$it") }
-            .let { true }
+
+        return true
     }
 }

@@ -29,7 +29,7 @@ class StartGameUseCase @Inject constructor(
             authorizationService.authorize(this.ownerName, this.ownerDeviceId)
         }
 
-        eventBus.getLastModifiedLobby().also {
+        eventBus.getLastModifiedLobby()?.also {
             if (it.leftTeam.isEmpty().or(it.rightTeam.isEmpty())) throw MissingOpponentsException()
             if (it.owner != startGameMessage.ownerName) throw UnauthorizedException()
 

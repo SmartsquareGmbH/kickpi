@@ -28,7 +28,7 @@ class LeaveLobbyUseCase @Inject constructor(
             authorizationService.authorize(this.playerName, this.playerDeviceId)
         }
 
-        eventBus.getLastModifiedLobby().also {
+        eventBus.getLastModifiedLobby()?.also {
             val playerName = leaveLobbyMessage.playerName
 
             if (it.contains(playerName)) {

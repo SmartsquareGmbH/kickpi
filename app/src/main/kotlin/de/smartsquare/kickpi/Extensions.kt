@@ -9,6 +9,7 @@ import com.google.android.gms.nearby.messages.SubscribeOptions
 import de.smartsquare.kickpi.create.LobbyCreatedEvent
 import de.smartsquare.kickpi.join.NewPlayerJoinedEvent
 import de.smartsquare.kickpi.leave.PlayerLeavedEvent
+import de.smartsquare.kickpi.play.score.GameFinishedEvent
 import de.smartsquare.kickpi.play.score.GoalScoredEvent
 import de.smartsquare.kickpi.play.start.GameStartedEvent
 import org.greenrobot.eventbus.EventBus
@@ -33,8 +34,8 @@ inline fun EventBus.getLastModifiedLobby() =
         LobbyCreatedEvent::class.java,
         PlayerLeavedEvent::class.java
     ).mapNotNull { this.getStickyEvent(it) }
-        .last()
-        .lobby
+        .map { it.lobby }
+        .lastOrNull()
 
 inline fun EventBus.isGameInProgress() =
     listOf(
@@ -49,10 +50,11 @@ inline fun EventBus.isGameInProgress() =
 inline fun EventBus.removeStickyModifiedGameEvent() =
     listOf(
         GameStartedEvent::class.java,
-        GoalScoredEvent::class.java
-    ).mapNotNull { this.getStickyEvent(it) }
+        GoalScoredEvent::class.java,
+        GameFinishedEvent::class.java
+    ).mapNotNull { this.removeStickyEvent(it) }
         .map { it.lobby }
-        .last()
+        .lastOrNull()
 
 inline fun MessagesClient.subscribeOnType(listener: MessageListener, type: String) {
     MessageFilter.Builder().includeNamespacedType("de.smartsquare.kickpi", type).build()
