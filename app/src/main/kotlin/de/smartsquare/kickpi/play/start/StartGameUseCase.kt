@@ -29,16 +29,15 @@ class StartGameUseCase @Inject constructor(
             authorizationService.authorize(this.ownerName, this.ownerDeviceId)
         }
 
-        eventBus.getLastModifiedLobby()
-            ?.also {
-                if (it.leftTeam.isEmpty().or(it.rightTeam.isEmpty())) throw MissingOpponentsException()
-                if (it.owner != startGameMessage.ownerName) throw UnauthorizedException()
+        eventBus.getLastModifiedLobby()?.also {
+            if (it.leftTeam.isEmpty().or(it.rightTeam.isEmpty())) throw MissingOpponentsException()
+            if (it.owner != startGameMessage.ownerName) throw UnauthorizedException()
 
-                with(eventBus) {
-                    removeStickyModifiedLobbyEvent()
-                    postSticky(GameStartedEvent(it))
-                }
-                Log.i(TAG, "Game started with lobby: $it")
+            with(eventBus) {
+                removeStickyModifiedLobbyEvent()
+                postSticky(GameStartedEvent(it))
             }
+            Log.i(TAG, "Game started with lobby: $it")
+        }
     }
 }

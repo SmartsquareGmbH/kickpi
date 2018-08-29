@@ -105,7 +105,7 @@ class LeaveLobbyUseCaseSpecification {
         leaveLobbyFunction shouldThrow IllegalArgumentException::class
     }
 
-    @Test fun `leave lobby as last standing player`() {
+    @Test fun `leave lobby as last man standing`() {
         eventBus.postSticky(LobbyCreatedEvent(Lobby("deen")))
 
         val leaveLobbyMessage = LeaveLobbyMessage("deen", "1337")

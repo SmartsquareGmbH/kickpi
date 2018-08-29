@@ -9,6 +9,9 @@ import com.google.android.gms.nearby.messages.SubscribeOptions
 import de.smartsquare.kickpi.create.LobbyCreatedEvent
 import de.smartsquare.kickpi.join.NewPlayerJoinedEvent
 import de.smartsquare.kickpi.leave.PlayerLeavedEvent
+import de.smartsquare.kickpi.play.score.GameFinishedEvent
+import de.smartsquare.kickpi.play.score.GoalScoredEvent
+import de.smartsquare.kickpi.play.start.GameStartedEvent
 import org.greenrobot.eventbus.EventBus
 
 inline fun String.throwIllegalArgumentExceptionIfBlank() {
@@ -20,8 +23,9 @@ inline fun EventBus.removeStickyModifiedLobbyEvent() =
         NewPlayerJoinedEvent::class.java,
         LobbyCreatedEvent::class.java,
         PlayerLeavedEvent::class.java
-    ).map { this.removeStickyEvent(it) }
-        .findLast { it != null }
+    )
+        .mapNotNull { this.removeStickyEvent(it) }
+        .lastOrNull()
         ?.lobby
 
 inline fun EventBus.getLastModifiedLobby() =
@@ -29,9 +33,28 @@ inline fun EventBus.getLastModifiedLobby() =
         NewPlayerJoinedEvent::class.java,
         LobbyCreatedEvent::class.java,
         PlayerLeavedEvent::class.java
+    ).mapNotNull { this.getStickyEvent(it) }
+        .map { it.lobby }
+        .lastOrNull()
+
+inline fun EventBus.isGameInProgress() =
+    listOf(
+        NewPlayerJoinedEvent::class.java,
+        LobbyCreatedEvent::class.java,
+        PlayerLeavedEvent::class.java,
+        GameStartedEvent::class.java,
+        GoalScoredEvent::class.java
     ).map { this.getStickyEvent(it) }
-        .findLast { it != null }
-        ?.lobby
+        .any { it != null }
+
+inline fun EventBus.removeStickyModifiedGameEvent() =
+    listOf(
+        GameStartedEvent::class.java,
+        GoalScoredEvent::class.java,
+        GameFinishedEvent::class.java
+    ).mapNotNull { this.removeStickyEvent(it) }
+        .map { it.lobby }
+        .lastOrNull()
 
 inline fun MessagesClient.subscribeOnType(listener: MessageListener, type: String) {
     MessageFilter.Builder().includeNamespacedType("de.smartsquare.kickpi", type).build()

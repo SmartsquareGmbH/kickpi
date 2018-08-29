@@ -1,5 +1,6 @@
 package de.smartsquare.kickpi.play.start
 
 import de.smartsquare.kickpi.Lobby
+import de.smartsquare.kickpi.play.GameModificationEvent
 
-class GameStartedEvent(val lobby: Lobby)
+class GameStartedEvent(lobby: Lobby) : GameModificationEvent(lobby)
