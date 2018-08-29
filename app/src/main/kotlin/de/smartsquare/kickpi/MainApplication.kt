@@ -6,8 +6,9 @@ import de.smartsquare.kickpi.create.CreateLobbyUseCase
 import de.smartsquare.kickpi.idle.BroadcastIdleUseCase
 import de.smartsquare.kickpi.join.JoinLobbyUseCase
 import de.smartsquare.kickpi.leave.LeaveLobbyUseCase
+import de.smartsquare.kickpi.play.broadcast.BroadcastGameUseCase
+import de.smartsquare.kickpi.play.save.SaveUseCase
 import de.smartsquare.kickpi.play.score.ScoreUseCase
-import de.smartsquare.kickpi.play.start.GameStartedEvent
 import de.smartsquare.kickpi.play.start.StartGameUseCase
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
@@ -21,6 +22,8 @@ class MainApplication : Application() {
     @Inject lateinit var startGameUseCase: StartGameUseCase
     @Inject lateinit var createLobbyUseCase: CreateLobbyUseCase
     @Inject lateinit var scoreUseCase: ScoreUseCase
+    @Inject lateinit var saveUseCase: SaveUseCase
+    @Inject lateinit var broadcastGameUseCase: BroadcastGameUseCase
 
     @Inject lateinit var eventBus: EventBus
 
@@ -33,7 +36,9 @@ class MainApplication : Application() {
             .inject(this)
 
         eventBus.register(broadcastIdleUseCase)
-        scoreUseCase.registerGPIOCallbacksForBothGoalsOnGameStartedEvent(GameStartedEvent(Lobby("deen")))
+        eventBus.register(broadcastGameUseCase)
+        eventBus.register(saveUseCase)
+        eventBus.register(scoreUseCase)
 
         messagesClient.subscribeOnType(createLobbyUseCase, "CREATE_LOBBY")
         messagesClient.subscribeOnType(joinlobbyUseCase, "JOIN_LOBBY")
