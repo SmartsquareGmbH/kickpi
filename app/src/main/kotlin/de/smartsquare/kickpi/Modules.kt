@@ -6,9 +6,10 @@ import com.google.android.things.pio.PeripheralManager
 import dagger.Module
 import dagger.Provides
 import de.smartsquare.kickpi.BuildConfig.KICKWAY_URL
-import de.smartsquare.kickpi.play.save.GameService
+import de.smartsquare.kickpi.play.save.GameRepository
 import org.greenrobot.eventbus.EventBus
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -35,15 +36,15 @@ class ActivityModule(private val context: Context) {
 @Module
 class HTTPModule {
 
-    @Provides
-    fun joinLobbyAuthorizationService() = Retrofit.Builder()
+    private val baseRetrofit = Retrofit.Builder()
         .baseUrl(KICKWAY_URL)
-        .build()
-        .create(AuthorizationInterface::class.java)
+        .addConverterFactory(GsonConverterFactory.create())
 
     @Provides
-    fun gameService() = Retrofit.Builder()
-        .baseUrl(KICKWAY_URL)
-        .build()
-        .create(GameService::class.java)
+    fun joinLobbyAuthorizationService() = baseRetrofit
+        .build().create(AuthorizationRepository::class.java)
+
+    @Provides
+    fun gameService() = baseRetrofit
+        .build().create(GameRepository::class.java)
 }
