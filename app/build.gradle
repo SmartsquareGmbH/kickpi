@@ -59,6 +59,7 @@ dependencies {
 
     testImplementation "io.mockk:mockk:1.8.6"
     testImplementation "org.amshove.kluent:kluent-android:1.41"
+    testCompileOnly 'com.google.android.things:androidthings:1.0'
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"

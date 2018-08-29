@@ -11,7 +11,7 @@ import io.mockk.verify
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldThrow
 import org.greenrobot.eventbus.EventBus
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class CreateLobbyUseCaseSpecification {
@@ -21,7 +21,7 @@ class CreateLobbyUseCaseSpecification {
     private val authorizationService = mockk<AuthorizationService>(relaxed = true)
     private val createLobbyUseCase = CreateLobbyUseCase(authorizationService, eventBus, messagesClient)
 
-    @AfterEach fun cleanupEventBus() {
+    @BeforeEach fun cleanupEventBus() {
         eventBus.removeAllStickyEvents()
     }
 
