@@ -6,10 +6,13 @@ import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.TeamAlreadyFullException
 import de.smartsquare.kickpi.UnauthorizedException
-import de.smartsquare.kickpi.create.LobbyCreatedEvent
-import de.smartsquare.kickpi.join.JoinLobbyMessage.Team.LEFT
-import de.smartsquare.kickpi.join.JoinLobbyMessage.Team.RIGHT
-import de.smartsquare.kickpi.leave.PlayerLeavedEvent
+import de.smartsquare.kickpi.matchmaking.create.LobbyCreatedEvent
+import de.smartsquare.kickpi.matchmaking.join.JoinLobbyMessage
+import de.smartsquare.kickpi.matchmaking.join.JoinLobbyMessage.Team.LEFT
+import de.smartsquare.kickpi.matchmaking.join.JoinLobbyMessage.Team.RIGHT
+import de.smartsquare.kickpi.matchmaking.join.JoinLobbyUseCase
+import de.smartsquare.kickpi.matchmaking.join.NewPlayerJoinedEvent
+import de.smartsquare.kickpi.matchmaking.leave.PlayerLeavedEvent
 import io.mockk.every
 import io.mockk.mockk
 import org.amshove.kluent.shouldContain

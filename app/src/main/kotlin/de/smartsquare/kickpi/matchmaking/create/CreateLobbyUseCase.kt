@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.create
+package de.smartsquare.kickpi.matchmaking.create
 
 import android.util.Log
 import com.google.android.gms.nearby.messages.Message

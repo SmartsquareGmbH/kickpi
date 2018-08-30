@@ -6,9 +6,9 @@ import com.google.android.gms.nearby.messages.MessageFilter
 import com.google.android.gms.nearby.messages.MessageListener
 import com.google.android.gms.nearby.messages.MessagesClient
 import com.google.android.gms.nearby.messages.SubscribeOptions
-import de.smartsquare.kickpi.create.LobbyCreatedEvent
-import de.smartsquare.kickpi.join.NewPlayerJoinedEvent
-import de.smartsquare.kickpi.leave.PlayerLeavedEvent
+import de.smartsquare.kickpi.matchmaking.create.LobbyCreatedEvent
+import de.smartsquare.kickpi.matchmaking.join.NewPlayerJoinedEvent
+import de.smartsquare.kickpi.matchmaking.leave.PlayerLeavedEvent
 import de.smartsquare.kickpi.play.score.GameFinishedEvent
 import de.smartsquare.kickpi.play.score.GoalScoredEvent
 import de.smartsquare.kickpi.play.start.GameStartedEvent

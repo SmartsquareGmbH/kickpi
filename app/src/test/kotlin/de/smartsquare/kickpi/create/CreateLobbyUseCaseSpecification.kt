@@ -5,6 +5,9 @@ import de.smartsquare.kickpi.AuthorizationService
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.MatchInProgressException
 import de.smartsquare.kickpi.NearbyAdapter
+import de.smartsquare.kickpi.matchmaking.create.CreateLobbyMessage
+import de.smartsquare.kickpi.matchmaking.create.CreateLobbyUseCase
+import de.smartsquare.kickpi.matchmaking.create.LobbyCreatedEvent
 import de.smartsquare.kickpi.play.score.GoalScoredEvent
 import io.mockk.mockk
 import io.mockk.verify

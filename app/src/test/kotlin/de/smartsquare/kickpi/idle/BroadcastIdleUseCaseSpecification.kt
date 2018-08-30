@@ -1,7 +1,7 @@
 package de.smartsquare.kickpi.idle
 
 import com.google.android.gms.nearby.messages.MessagesClient
-import de.smartsquare.kickpi.create.LobbyCreatedEvent
+import de.smartsquare.kickpi.matchmaking.create.LobbyCreatedEvent
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test

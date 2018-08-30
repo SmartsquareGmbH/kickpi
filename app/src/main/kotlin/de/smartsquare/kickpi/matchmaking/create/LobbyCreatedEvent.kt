@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.create
+package de.smartsquare.kickpi.matchmaking.create
 
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.LobbyModificationEvent

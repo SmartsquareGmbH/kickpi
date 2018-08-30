@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.join
+package de.smartsquare.kickpi.matchmaking.join
 
 import android.util.Log
 import com.google.android.gms.nearby.messages.Message
@@ -8,7 +8,7 @@ import de.smartsquare.kickpi.DuplicateNameException
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.TeamAlreadyFullException
-import de.smartsquare.kickpi.join.JoinLobbyMessage.Team.LEFT
+import de.smartsquare.kickpi.matchmaking.join.JoinLobbyMessage.Team.LEFT
 import de.smartsquare.kickpi.removeStickyModifiedLobbyEvent
 import de.smartsquare.kickpi.throwIllegalArgumentExceptionIfBlank
 import org.greenrobot.eventbus.EventBus

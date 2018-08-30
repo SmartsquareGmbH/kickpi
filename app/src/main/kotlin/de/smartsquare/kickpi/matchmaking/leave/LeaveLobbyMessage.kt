@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.leave
+package de.smartsquare.kickpi.matchmaking.leave
 
 import com.squareup.moshi.JsonClass
 

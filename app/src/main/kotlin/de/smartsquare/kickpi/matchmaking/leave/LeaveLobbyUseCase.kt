@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.leave
+package de.smartsquare.kickpi.matchmaking.leave
 
 import android.util.Log
 import com.google.android.gms.nearby.messages.Message

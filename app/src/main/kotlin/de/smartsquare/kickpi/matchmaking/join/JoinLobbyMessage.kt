@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.join
+package de.smartsquare.kickpi.matchmaking.join
 
 import com.squareup.moshi.JsonClass
 

@@ -4,8 +4,12 @@ import de.smartsquare.kickpi.AuthorizationService
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.UnauthorizedException
-import de.smartsquare.kickpi.create.LobbyCreatedEvent
-import de.smartsquare.kickpi.join.NewPlayerJoinedEvent
+import de.smartsquare.kickpi.matchmaking.create.LobbyCreatedEvent
+import de.smartsquare.kickpi.matchmaking.join.NewPlayerJoinedEvent
+import de.smartsquare.kickpi.matchmaking.leave.GameCanceledEvent
+import de.smartsquare.kickpi.matchmaking.leave.LeaveLobbyMessage
+import de.smartsquare.kickpi.matchmaking.leave.LeaveLobbyUseCase
+import de.smartsquare.kickpi.matchmaking.leave.PlayerLeavedEvent
 import de.smartsquare.kickpi.removeStickyModifiedLobbyEvent
 import io.mockk.every
 import io.mockk.mockk

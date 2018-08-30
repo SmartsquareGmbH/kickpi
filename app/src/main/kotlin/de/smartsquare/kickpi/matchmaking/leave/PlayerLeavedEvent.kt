@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.leave
+package de.smartsquare.kickpi.matchmaking.leave
 
 import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.LobbyModificationEvent

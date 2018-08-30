@@ -5,7 +5,7 @@ import de.smartsquare.kickpi.Lobby
 import de.smartsquare.kickpi.MissingOpponentsException
 import de.smartsquare.kickpi.NearbyAdapter
 import de.smartsquare.kickpi.UnauthorizedException
-import de.smartsquare.kickpi.join.NewPlayerJoinedEvent
+import de.smartsquare.kickpi.matchmaking.join.NewPlayerJoinedEvent
 import io.mockk.mockk
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldNotEqual
