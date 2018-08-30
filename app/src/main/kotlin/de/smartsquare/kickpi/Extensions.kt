@@ -6,6 +6,7 @@ import com.google.android.gms.nearby.messages.MessageFilter
 import com.google.android.gms.nearby.messages.MessageListener
 import com.google.android.gms.nearby.messages.MessagesClient
 import com.google.android.gms.nearby.messages.SubscribeOptions
+import com.google.android.things.pio.Gpio
 import de.smartsquare.kickpi.create.LobbyCreatedEvent
 import de.smartsquare.kickpi.join.NewPlayerJoinedEvent
 import de.smartsquare.kickpi.leave.PlayerLeavedEvent
@@ -63,3 +64,5 @@ inline fun MessagesClient.subscribeOnType(listener: MessageListener, type: Strin
             this.subscribe(listener, it)
         }
 }
+
+inline fun Gpio.isStuck() = this.value
