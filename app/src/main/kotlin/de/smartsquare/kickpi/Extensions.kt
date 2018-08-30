@@ -9,6 +9,7 @@ import com.google.android.gms.nearby.messages.SubscribeOptions
 import de.smartsquare.kickpi.matchmaking.create.LobbyCreatedEvent
 import de.smartsquare.kickpi.matchmaking.join.NewPlayerJoinedEvent
 import de.smartsquare.kickpi.matchmaking.leave.PlayerLeavedEvent
+import com.google.android.things.pio.Gpio
 import de.smartsquare.kickpi.play.score.GameFinishedEvent
 import de.smartsquare.kickpi.play.score.GoalScoredEvent
 import de.smartsquare.kickpi.play.start.GameStartedEvent
@@ -63,3 +64,5 @@ inline fun MessagesClient.subscribeOnType(listener: MessageListener, type: Strin
             this.subscribe(listener, it)
         }
 }
+
+inline fun Gpio.isStuck() = this.value
