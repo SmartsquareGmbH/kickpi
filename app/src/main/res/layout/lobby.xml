@@ -68,7 +68,6 @@
                 android:layout_weight="1"
                 android:fontFamily="serif-monospace"
                 android:shadowColor="@android:color/black"
-                android:text="--------------------"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="36sp"
                 android:typeface="serif" />
@@ -80,7 +79,6 @@
                 android:layout_weight="1"
                 android:fontFamily="serif-monospace"
                 android:shadowColor="@android:color/black"
-                android:text="--------------------"
                 android:textColor="@android:color/holo_blue_bright"
                 android:textSize="36sp"
                 android:typeface="serif" />
@@ -100,7 +98,6 @@
                     android:id="@+id/firstPlayerLeft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="First Player Left"
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="30sp" />
 
@@ -108,7 +105,6 @@
                     android:id="@+id/scndPlayerLeft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Second Player Left"
                     android:textColor="@android:color/holo_red_light"
                     android:textSize="30sp" />
             </LinearLayout>
@@ -128,7 +124,6 @@
                     android:id="@+id/firstPlayerRight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="First Right Player"
                     android:textAlignment="viewEnd"
                     android:textColor="@android:color/holo_blue_bright"
                     android:textSize="30sp" />
@@ -137,7 +132,6 @@
                     android:id="@+id/scndPlayerRight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Second Right Player"
                     android:textAlignment="viewEnd"
                     android:textColor="@android:color/holo_blue_bright"
                     android:textSize="30sp" />
