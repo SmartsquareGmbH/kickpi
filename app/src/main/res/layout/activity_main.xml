@@ -1,38 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:background="@color/colorPrimary"
+        android:elevation="16dp">
+
+        <android.support.constraint.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            app:barrierDirection="left"
+            app:constraint_referenced_ids="goldPlayer, silverPlayer, bronzePlayer"
+            tools:layout_editor_absoluteX="903dp" />
 
         <TextView
-            android:id="@+id/idleheader"
+            android:id="@+id/headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:fontFamily="serif-monospace"
-            android:shadowColor="@android:color/white"
-            android:text="KickPi"
-            android:textColor="@android:color/black"
-            android:textSize="192sp"
-            android:typeface="serif" />
+
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/bangers"
+            android:text="Smartsquare HQ Kickpi "
+            android:textColor="@android:color/white"
+            android:textSize="56sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/silverIcon"
+            app:layout_constraintHorizontal_bias="0.595"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/goldIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/silverIcon"
+            app:layout_constraintEnd_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:srcCompat="@drawable/trophy_gold" />
+
+        <ImageView
+            android:id="@+id/bronzeIcon"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/silverIcon"
+            app:srcCompat="@drawable/trophy_bronze" />
+
+        <ImageView
+            android:id="@+id/silverIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/bronzeIcon"
+            app:layout_constraintEnd_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/goldIcon"
+            app:srcCompat="@drawable/trophy_silver" />
 
         <TextView
-            android:id="@+id/idletext"
+            android:id="@+id/silverPlayer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="serif-monospace"
-            android:shadowColor="@android:color/black"
-            android:text="Come and play with me :ˆ)"
-            android:textColor="@android:color/holo_red_light"
-            android:textSize="36sp"
-            android:typeface="serif" />
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="ruby"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/silverIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toTopOf="@+id/silverIcon" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/bronzePlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="saschar"
+            android:textColor="@android:color/white"
 
-</FrameLayout>
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bronzeIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toTopOf="@+id/bronzeIcon" />
+
+        <TextView
+            android:id="@+id/goldPlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="deen"
+            android:textColor="@android:color/white"
+
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/goldIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toTopOf="@+id/goldIcon" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/fragmentcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_weight="0.8">
+
+    </FrameLayout>
+
+
+</LinearLayout>

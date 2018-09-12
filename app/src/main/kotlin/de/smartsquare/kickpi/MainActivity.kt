@@ -7,20 +7,17 @@ import android.util.Log
 import android.widget.TextView
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import de.smartsquare.kickpi.gameserver.Lobby
 import de.smartsquare.kickpi.gameserver.Position
-import de.smartsquare.kickpi.gameserver.State
 import de.smartsquare.kickprotocol.Kickprotocol
 import org.koin.android.ext.android.inject
 import de.smartsquare.kickprotocol.ConnectionEvent.Connected
 import de.smartsquare.kickprotocol.message.IdleMessage
 import org.koin.core.parameter.parametersOf
 import de.smartsquare.kickpi.gameserver.State.Matchmaking
-import de.smartsquare.kickpi.gameserver.State.Playing
 import de.smartsquare.kickpi.gameserver.State.Idle
+import de.smartsquare.kickpi.idle.LobbyFragment
 import de.smartsquare.kickprotocol.message.MatchmakingMessage
 import de.smartsquare.kickprotocol.message.PlayingMessage
-import io.reactivex.exceptions.OnErrorNotImplementedException
 import io.reactivex.plugins.RxJavaPlugins
 
 class MainActivity : AppCompatActivity() {
@@ -34,16 +31,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+        val lobbyFragment = LobbyFragment()
+        val lobbyFragmentTransaction = supportFragmentManager.beginTransaction()
+        lobbyFragmentTransaction.add(R.id.fragmentcontainer, lobbyFragment)
+        lobbyFragmentTransaction.commit()
 
-        RxJavaPlugins.setErrorHandler { error ->
-            if (error is OnErrorNotImplementedException) {
-                error.cause?.message
-            } else {
-                error.message
-            }?.let {
-                Log.i("Error in Activity", it)
-                Snackbar.make(this.findViewById(android.R.id.content), it, 5000).show()
-            }
+        RxJavaPlugins.setErrorHandler {
+            Log.i("Error in Activity", it.cause?.message)
+            it.cause?.message?.let { it1 -> Snackbar.make(this.findViewById(android.R.id.content), it1, 5000).show() }
         }
 
         kickprotocol.advertise("Smartsquare HQ Kicker")
@@ -77,17 +72,7 @@ class MainActivity : AppCompatActivity() {
                 kickprotocol.broadcastAndAwait(MatchmakingMessage(lobby.toKickprotocolLobby()))
                     .subscribe()
 
-                setContentView(R.layout.lobby)
 
-                val firstPlayerLeft: TextView = findViewById(R.id.firstPlayerLeft)
-                val secondPlayerLeft: TextView = findViewById(R.id.scndPlayerLeft)
-                val firstPlayerRight: TextView = findViewById(R.id.firstPlayerRight)
-                val secondPlayerRight: TextView = findViewById(R.id.scndPlayerRight)
-
-                lobby.rightTeam.getOrNull(0)?.also { firstPlayerRight.text = it }
-                lobby.rightTeam.getOrNull(1)?.also { secondPlayerRight.text = it }
-                lobby.leftTeam.getOrNull(0)?.also { firstPlayerLeft.text = it }
-                lobby.leftTeam.getOrNull(1)?.also { secondPlayerLeft.text = it }
             }
 
         kickprotocol.joinLobbyMessageEvents
@@ -100,19 +85,8 @@ class MainActivity : AppCompatActivity() {
                     .let { Position.valueOf(it.name) }
                     .also { lobby.join(position = it, name = kickprotocolMessageWithEndpoint.message.username) }
 
-
                 kickprotocol.broadcastAndAwait(MatchmakingMessage(lobby.toKickprotocolLobby()))
                     .subscribe()
-
-                val firstPlayerLeft: TextView = findViewById(R.id.firstPlayerLeft)
-                val secondPlayerLeft: TextView = findViewById(R.id.scndPlayerLeft)
-                val firstPlayerRight: TextView = findViewById(R.id.firstPlayerRight)
-                val secondPlayerRight: TextView = findViewById(R.id.scndPlayerRight)
-
-                lobby.rightTeam.getOrNull(0)?.also { firstPlayerRight.text = it }
-                lobby.rightTeam.getOrNull(1)?.also { secondPlayerRight.text = it }
-                lobby.leftTeam.getOrNull(0)?.also { firstPlayerLeft.text = it }
-                lobby.leftTeam.getOrNull(1)?.also { secondPlayerLeft.text = it }
             }
 
         kickprotocol.startGameMessageEvents
@@ -126,12 +100,36 @@ class MainActivity : AppCompatActivity() {
                             .subscribe()
                     }
                     ?.also {
-                        setContentView(R.layout.score)
+                        setContentView(R.layout.fragment_score)
 
                         val scoreLeftTeam: TextView = findViewById(R.id.scoreLeft)
                         val scoreRightTeam: TextView = findViewById(R.id.scoreRight)
                         scoreLeftTeam.text = lobby.scoreLeft.toString()
                         scoreRightTeam.text = lobby.scoreRight.toString()
+                    }
+            }
+
+        kickprotocol.leaveLobbyMessageEvents
+            .retry()
+            .autoDisposable(this.scope())
+            .subscribe { kickprotocolMessageWithEndpoint ->
+                endpoints[kickprotocolMessageWithEndpoint.endpointId]
+                    ?.let { lobby.leave(it) }
+                    ?.let {
+                        when {
+                            lobby currentlyIn Idle -> IdleMessage()
+                            else -> MatchmakingMessage(lobby.toKickprotocolLobby())
+                        }
+                    }
+                    ?.also {
+                        kickprotocol.broadcastAndAwait(it).subscribe()
+                    }
+                    ?.also {
+                        val firstPlayerLeft: TextView = findViewById(R.id.firstPlayerLeft)
+                        val firstPlayerRight: TextView = findViewById(R.id.firstPlayerRight)
+
+                        lobby.rightTeam.getOrNull(0)?.also { firstPlayerRight.text = it }
+                        lobby.leftTeam.getOrNull(0)?.also { firstPlayerLeft.text = it }
                     }
             }
     }

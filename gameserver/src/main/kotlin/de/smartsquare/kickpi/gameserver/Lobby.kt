@@ -44,7 +44,7 @@ class Lobby {
     }
 
     fun leave(name: String) {
-        if (this currentlyIn Idle || this currentlyIn Playing) throw IllegalStateException("$name tried to leave lobby but it is currently in $state.")
+            if (this currentlyIn Idle || this currentlyIn Playing) throw IllegalStateException("$name tried to leave lobby but it is currently in $state.")
         if (name.trim().isEmpty()) throw IllegalArgumentException("Player name should not be blank")
 
         val allPlayers = leftTeam + rightTeam

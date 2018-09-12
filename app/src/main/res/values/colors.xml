@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#506795</color>
+    <color name="colorPrimaryDark">#405482</color>
+    <color name="colorAccent">#4675FF</color>
+
+    <color name="icon">#9E9E9E</color>
+    <color name="navbar">#9E9E9E</color>
+
+
+
+    <color name="gold">#FBC02D</color>
+    <color name="silver">#BDBDBD</color>
+    <color name="bronze">#BF360C</color>
+</resources>

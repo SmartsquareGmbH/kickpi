@@ -251,7 +251,4 @@ class LobbySpecification {
 
         lobby.scoreRight shouldEqual 1
     }
-
-
-
 }
