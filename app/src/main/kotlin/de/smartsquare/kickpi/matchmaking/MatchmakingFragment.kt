@@ -9,8 +9,11 @@ import de.smartsquare.kickpi.R
 
 class MatchmakingFragment : Fragment() {
 
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_matchmaking, container, false)
+
+
 }

@@ -82,13 +82,14 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="ruby"
+            android:textAlignment="viewStart"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/silverIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
-            app:layout_constraintTop_toTopOf="@+id/silverIcon" />
+            app:layout_constraintTop_toTopOf="@+id/silverIcon"
+            tools:text="deen" />
 
         <TextView
             android:id="@+id/bronzePlayer"
@@ -96,14 +97,15 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="saschar"
-            android:textColor="@android:color/white"
 
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/bronzeIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
-            app:layout_constraintTop_toTopOf="@+id/bronzeIcon" />
+            app:layout_constraintTop_toTopOf="@+id/bronzeIcon"
+            tools:text="McCock" />
 
         <TextView
             android:id="@+id/goldPlayer"
@@ -111,14 +113,15 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="deen"
-            android:textColor="@android:color/white"
 
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/goldIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
-            app:layout_constraintTop_toTopOf="@+id/goldIcon" />
+            app:layout_constraintTop_toTopOf="@+id/goldIcon"
+            tools:text="ruby" />
 
     </android.support.constraint.ConstraintLayout>
 

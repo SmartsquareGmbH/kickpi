@@ -1,6 +1,6 @@
-package de.smartsquare.kickpi
+package de.smartsquare.kickpi.playing
 
-import de.smartsquare.kickpi.Game.Team
+import de.smartsquare.kickpi.playing.Game.Team
 import de.smartsquare.kickpi.gameserver.Lobby
 import okhttp3.ResponseBody
 import retrofit2.Call
