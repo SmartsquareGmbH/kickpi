@@ -15,6 +15,7 @@ import de.smartsquare.kickpi.matchmaking.StartGameUseCase
 import de.smartsquare.kickpi.navbar.KickwayStatisticsRepository
 import de.smartsquare.kickpi.navbar.StatisticsService
 import de.smartsquare.kickpi.navbar.TopThreeViewModel
+import de.smartsquare.kickpi.playing.GameRepository
 import de.smartsquare.kickpi.playing.KickchainGameRepository
 import de.smartsquare.kickprotocol.Kickprotocol
 import org.koin.android.viewmodel.ext.koin.viewModel
@@ -38,7 +39,10 @@ private val network = module {
     single { get<Retrofit>().create(KickwayAuthorizationRepository::class.java) }
 
     single { get<Retrofit>().create(KickwayStatisticsRepository::class.java) }
+
     factory { StatisticsService(get()) }
+
+    factory { GameRepository(get()) }
 }
 
 private val hardware = module {

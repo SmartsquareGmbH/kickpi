@@ -22,6 +22,7 @@ import de.smartsquare.kickpi.matchmaking.LeaveLobbyUseCase
 import de.smartsquare.kickpi.matchmaking.MatchmakingFragment
 import de.smartsquare.kickpi.matchmaking.StartGameUseCase
 import de.smartsquare.kickpi.navbar.TopThreeViewModel
+import de.smartsquare.kickpi.playing.GameRepository
 import de.smartsquare.kickpi.playing.ScoreFragment
 import de.smartsquare.kickpi.playing.ScoreUseCase
 import de.smartsquare.kickprotocol.ConnectionEvent.Connected
@@ -40,7 +41,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 class MainActivity : AppCompatActivity() {
 
     private val kickprotocol: Kickprotocol by inject() { parametersOf(this) }
-
+    private val gameRepository: GameRepository by inject() { parametersOf(this) }
     private val peripheralManager by inject<PeripheralManager>()
     private val endpoints by inject<Endpoints>()
 
@@ -85,7 +86,7 @@ class MainActivity : AppCompatActivity() {
             peripheralManager.open(gpio)
                 .throttleFirst(5, SECONDS, Schedulers.computation())
                 .autoDisposable(this.scope())
-                .subscribe(ScoreUseCase(kickprotocol, lobbyViewModel, callback))
+                .subscribe(ScoreUseCase(kickprotocol, lobbyViewModel, callback, gameRepository))
         }
 
         kickprotocol.advertise("Smartsquare HQ Kicker")
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             .autoDisposable(this.scope())
             .subscribe(CreateGameUseCase(kickprotocol, lobbyViewModel, endpoints))
         lobbyViewModel.state.observe(this, Observer {
-                val fragment = when (it) {
+            val fragment = when (it) {
                 State.Matchmaking -> MatchmakingFragment()
                 State.Playing -> ScoreFragment()
                 else -> LobbyFragment()

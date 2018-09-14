@@ -16,7 +16,8 @@ import java.lang.Thread.sleep
 class ScoreUseCase(
     private val kickprotocol: Kickprotocol,
     private val lobby: LobbyViewModel,
-    private val onGoalCallback: () -> Unit
+    private val onGoalCallback: () -> Unit,
+    private val gameRepository: GameRepository
 ) : Consumer<Unit> {
 
     private val TAG = "GPIO Callback"
@@ -33,6 +34,8 @@ class ScoreUseCase(
             kickprotocol.broadcastAndAwait(PlayingMessage(lobby.toKickprotocolLobby())).subscribe()
         } else {
             kickprotocol.broadcastAndAwait(PlayingMessage(lobby.toKickprotocolLobby())).subscribe()
+
+            gameRepository.save(lobby)
 
             doAsync {
                 sleep(5000)
