@@ -11,7 +11,6 @@ import de.smartsquare.kickpi.R
 import de.smartsquare.kickpi.domain.LobbyViewModel
 import kotterknife.bindView
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class MatchmakingFragment : Fragment() {
 
@@ -33,25 +32,17 @@ class MatchmakingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onPlayerJoined = Observer<List<String>> {
-            if (lobbyViewModel.leftTeam.value.isNotEmpty()) {
-                firstPlayerOfLeftTeam.text = lobbyViewModel.leftTeam.value[0]
-            }
-            if (lobbyViewModel.leftTeam.value.size > 1) {
-                secondPlayerOfLeftTeam.text = lobbyViewModel.leftTeam.value[1]
-            }
-            if (lobbyViewModel.rightTeam.value.isNotEmpty()) {
-                firstPlayerOfRightTeam.text = lobbyViewModel.rightTeam.value[0]
-            }
-            if (lobbyViewModel.rightTeam.value.size > 1) {
-                secondPlayerOfRightTeam.text = lobbyViewModel.rightTeam.value[1]
-            }
+        val updateUIOnTeamUpdate = Observer<List<String>> {
+            lobbyViewModel.leftTeam.value.getOrElse(0) {""}.also(firstPlayerOfLeftTeam::setText)
+            lobbyViewModel.leftTeam.value.getOrElse(1) {""}.also(secondPlayerOfLeftTeam::setText)
+            lobbyViewModel.rightTeam.value.getOrElse(0) {""}.also(firstPlayerOfRightTeam::setText)
+            lobbyViewModel.rightTeam.value.getOrElse(1) {""}.also(secondPlayerOfRightTeam::setText)
 
             connectionCount.text = (lobbyViewModel.leftTeam.value.size + lobbyViewModel.rightTeam.value.size).toString()
         }
 
-        lobbyViewModel.rightTeam.observe(this, onPlayerJoined)
-        lobbyViewModel.leftTeam.observe(this, onPlayerJoined)
+        lobbyViewModel.rightTeam.observe(this, updateUIOnTeamUpdate)
+        lobbyViewModel.leftTeam.observe(this, updateUIOnTeamUpdate)
     }
 
 
