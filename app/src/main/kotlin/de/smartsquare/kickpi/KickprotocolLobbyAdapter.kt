@@ -1,13 +1,14 @@
 package de.smartsquare.kickpi
 
-typealias KickPiLobby = de.smartsquare.kickpi.gameserver.Lobby
+import de.smartsquare.kickpi.domain.LobbyViewModel
+
 typealias KickprotocolLobby = de.smartsquare.kickprotocol.Lobby
 
-fun KickPiLobby.toKickprotocolLobby() = KickprotocolLobby(
-    this.owner.orElseGet { "" },
-    this.name.orElseGet { "" },
-    this.leftTeam,
-    this.rightTeam,
-    this.scoreLeft,
-    this.scoreRight
+fun LobbyViewModel.toKickprotocolLobby() = KickprotocolLobby(
+    this.owner.value ?: "",
+    this.name.value ?: "",
+    this.leftTeam.value,
+    this.rightTeam.value,
+    this.scoreLeft.value,
+    this.scoreRight.value
 )

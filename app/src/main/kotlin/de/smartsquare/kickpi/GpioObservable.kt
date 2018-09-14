@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 inline fun PeripheralManager.open(name: String): GpioObservable {
     val gpio = this.openGpio(name)
     gpio.setDirection(Gpio.DIRECTION_IN)
-    gpio.setEdgeTriggerType(Gpio.EDGE_FALLING)
+    gpio.setEdgeTriggerType(Gpio.EDGE_BOTH)
     gpio.setActiveType(Gpio.ACTIVE_HIGH)
     return GpioObservable(gpio)
 }

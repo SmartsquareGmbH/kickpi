@@ -1,7 +1,7 @@
 package de.smartsquare.kickpi.playing
 
+import de.smartsquare.kickpi.domain.LobbyViewModel
 import de.smartsquare.kickpi.playing.Game.Team
-import de.smartsquare.kickpi.gameserver.Lobby
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -9,11 +9,11 @@ import retrofit2.http.POST
 
 class GameRepository(private val kickchain: KickchainGameRepository) {
 
-    fun save(lobby: Lobby) {
+    fun save(lobby: LobbyViewModel) {
         lobby.let {
-            val leftTeam = lobby.leftTeam.let(::Team)
-            val rightTeam = lobby.rightTeam.let(::Team)
-            val score = Game.Score(lobby.scoreLeft, lobby.scoreRight)
+            val leftTeam = lobby.leftTeam.value.let(::Team)
+            val rightTeam = lobby.rightTeam.value.let(::Team)
+            val score = Game.Score(lobby.scoreLeft.value, lobby.scoreRight.value)
 
             Game(leftTeam, rightTeam, score)
         }.also { kickchain.save(it).execute() }

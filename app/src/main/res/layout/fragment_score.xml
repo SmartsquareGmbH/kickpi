@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="8dp"
-        android:text="2"
+        android:text="0"
         android:textSize="180sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
         app:layout_constraintEnd_toStartOf="@+id/textView3"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:text="9"
+        android:text="0"
         android:textSize="180sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView3"
         app:layout_constraintStart_toEndOf="@+id/textView3"
@@ -45,12 +45,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="-"
         android:textSize="140sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="452dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/secondPlayerOfLeftTeam"
@@ -58,54 +61,62 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="56dp"
         android:layout_marginEnd="8dp"
-        android:text="saschar"
+        android:layout_marginStart="8dp"
         android:textColor="@color/colorPrimary"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="@+id/scoreLeft"
-        app:layout_constraintEnd_toStartOf="@+id/scoreLeft" />
+        app:layout_constraintEnd_toStartOf="@+id/scoreLeft"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="saschar" />
 
     <TextView
         android:id="@+id/secondPlayerOfRightTeam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="56dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="drs"
         android:textColor="@color/colorPrimary"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="@+id/scoreRight"
-        app:layout_constraintStart_toEndOf="@+id/scoreRight" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/scoreRight"
+        tools:text="drs" />
 
     <TextView
         android:id="@+id/firstPlayerOfRightTeam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="56dp"
-        android:text="ruby"
         android:textColor="@color/colorPrimary"
         android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/scoreRight"
-        app:layout_constraintTop_toTopOf="@+id/scoreRight" />
+        app:layout_constraintTop_toTopOf="@+id/scoreRight"
+        tools:text="ruby" />
 
     <TextView
         android:id="@+id/firstPlayerOfLeftTeam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="56dp"
-        android:text="deen"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="52dp"
         android:textColor="@color/colorPrimary"
         android:textSize="50sp"
         app:layout_constraintEnd_toStartOf="@+id/scoreLeft"
-        app:layout_constraintTop_toTopOf="@+id/scoreLeft" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/scoreLeft"
+        tools:text="deen" />
 
     <nl.dionsegijn.konfetti.KonfettiView
         android:id="@+id/viewKonfetti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@android:style/Theme.Translucent"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

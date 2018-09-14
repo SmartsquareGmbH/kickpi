@@ -6,6 +6,7 @@ import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.things.pio.PeripheralManager
 import com.squareup.moshi.Moshi
 import de.smartsquare.kickpi.BuildConfig.KICKWAY_URL
+import de.smartsquare.kickpi.domain.LobbyViewModel
 import de.smartsquare.kickpi.idle.ConnectUseCase
 import de.smartsquare.kickpi.idle.CreateGameUseCase
 import de.smartsquare.kickpi.matchmaking.JoinLobbyUseCase
@@ -50,20 +51,12 @@ private val kickprotocol = module {
 }
 
 private val domain = module {
-    single { KickPiLobby() }
     single { Endpoints() }
-}
-
-private val useCases = module {
-    factory { parametersList -> ConnectUseCase(get(parameters = { parametersList }), get(), parametersList.get(0)) }
-    factory { parametersList -> CreateGameUseCase(get(parameters = { parametersList }), get(), get()) }
-    factory { parametersList -> JoinLobbyUseCase(get(parameters = { parametersList }), get(), get()) }
-    factory { parametersList -> StartGameUseCase(get(parameters = { parametersList }), get(), get()) }
-    factory { parametersList -> LeaveLobbyUseCase(get(parameters = { parametersList }), get(), get()) }
 }
 
 private val viewModels = module {
     viewModel { TopThreeViewModel(get()) }
+    viewModel { LobbyViewModel() }
 }
 
-val modules = listOf(network, hardware, kickprotocol, domain, useCases, viewModels)
+val modules = listOf(network, hardware, kickprotocol, domain, viewModels)

@@ -11,6 +11,9 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import de.smartsquare.kickpi.BuildConfig.LEFT_GOAL_GPIO
 import de.smartsquare.kickpi.BuildConfig.RIGHT_GOAL_GPIO
+import de.smartsquare.kickpi.domain.LobbyViewModel
+import de.smartsquare.kickpi.gameserver.Position
+import de.smartsquare.kickpi.gameserver.State
 import de.smartsquare.kickpi.idle.ConnectUseCase
 import de.smartsquare.kickpi.idle.CreateGameUseCase
 import de.smartsquare.kickpi.idle.LobbyFragment
@@ -19,11 +22,13 @@ import de.smartsquare.kickpi.matchmaking.LeaveLobbyUseCase
 import de.smartsquare.kickpi.matchmaking.MatchmakingFragment
 import de.smartsquare.kickpi.matchmaking.StartGameUseCase
 import de.smartsquare.kickpi.navbar.TopThreeViewModel
+import de.smartsquare.kickpi.playing.ScoreFragment
 import de.smartsquare.kickpi.playing.ScoreUseCase
 import de.smartsquare.kickprotocol.ConnectionEvent.Connected
 import de.smartsquare.kickprotocol.Kickprotocol
 import de.smartsquare.kickprotocol.filterMessages
 import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
@@ -36,26 +41,15 @@ class MainActivity : AppCompatActivity() {
 
     private val kickprotocol: Kickprotocol by inject() { parametersOf(this) }
 
-    private val createGameUseCase by inject<CreateGameUseCase> { parametersOf(this) }
-    private val connectUseCase by inject<ConnectUseCase> { parametersOf(this) }
-    private val joinLobbyUseCase by inject<JoinLobbyUseCase> { parametersOf(this) }
-    private val startGameUseCase by inject<StartGameUseCase> { parametersOf(this) }
-    private val leaveLobbyUseCase by inject<LeaveLobbyUseCase> { parametersOf(this) }
-
     private val peripheralManager by inject<PeripheralManager>()
-    private val lobby by inject<KickPiLobby>()
+    private val endpoints by inject<Endpoints>()
 
     private val goldPlayer by bindView<TextView>(R.id.goldPlayer)
     private val silverPlayer by bindView<TextView>(R.id.silverPlayer)
     private val bronzePlayer by bindView<TextView>(R.id.bronzePlayer)
 
-    private val firstPlayerLeft: TextView by bindView<TextView>(R.id.firstPlayerOfLeftTeam)
-    private val secondPlayerLeft: TextView by bindView<TextView>(R.id.secondPlayerOfLeftTeam)
-    private val firstPlayerRight: TextView by bindView<TextView>(R.id.firstPlayerOfLeftTeam)
-    private val secondPlayerRight: TextView by bindView<TextView>(R.id.firstPlayerOfRightTeam)
-    private val connectionCount: TextView by bindView<TextView>(R.id.connectionCount)
-
     private val topThreeViewModel by viewModel<TopThreeViewModel>()
+    private val lobbyViewModel by viewModel<LobbyViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,13 +79,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         mapOf(
-            LEFT_GOAL_GPIO to { lobby.scoreLeft++ },
-            RIGHT_GOAL_GPIO to { lobby.scoreRight++ }
+            LEFT_GOAL_GPIO to { lobbyViewModel.score(Position.LEFT) },
+            RIGHT_GOAL_GPIO to { lobbyViewModel.score(Position.RIGHT) }
         ).forEach { gpio, callback ->
             peripheralManager.open(gpio)
-                .debounce(5000, SECONDS)
+                .throttleFirst(5, SECONDS, Schedulers.computation())
                 .autoDisposable(this.scope())
-                .subscribe(ScoreUseCase(kickprotocol, lobby, callback))
+                .subscribe(ScoreUseCase(kickprotocol, lobbyViewModel, callback))
         }
 
         kickprotocol.advertise("Smartsquare HQ Kicker")
@@ -100,31 +94,37 @@ class MainActivity : AppCompatActivity() {
         kickprotocol.connectionEvents
             .filter { it is Connected }
             .autoDisposable(this.scope())
-            .subscribe(connectUseCase)
+            .subscribe(ConnectUseCase(kickprotocol, lobbyViewModel, this))
 
         kickprotocol.createGameMessageEvents
             .filterMessages()
             .autoDisposable(this.scope())
-            .subscribe(createGameUseCase)
-        createGameUseCase.onGameCreation {
-            with(supportFragmentManager.beginTransaction()) {
-                replace(R.id.fragmentcontainer, MatchmakingFragment()).also { commit() }
+            .subscribe(CreateGameUseCase(kickprotocol, lobbyViewModel, endpoints))
+        lobbyViewModel.state.observe(this, Observer {
+                val fragment = when (it) {
+                State.Matchmaking -> MatchmakingFragment()
+                State.Playing -> ScoreFragment()
+                else -> LobbyFragment()
             }
-        }
+            with(supportFragmentManager.beginTransaction()) {
+                replace(R.id.fragmentcontainer, fragment).also { commitNow() }
+            }
+        })
 
         kickprotocol.joinLobbyMessageEvents
             .filterMessages()
             .autoDisposable(this.scope())
-            .subscribe(joinLobbyUseCase)
+            .subscribe(JoinLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
 
         kickprotocol.startGameMessageEvents
             .filterMessages()
             .autoDisposable(this.scope())
-            .subscribe(startGameUseCase)
+            .subscribe(StartGameUseCase(kickprotocol, endpoints, lobbyViewModel))
         kickprotocol.leaveLobbyMessageEvents
             .filterMessages()
             .autoDisposable(this.scope())
-            .subscribe(leaveLobbyUseCase)
+            .subscribe(LeaveLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
+
     }
 
     override fun onStop() {

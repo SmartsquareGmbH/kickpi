@@ -2,7 +2,7 @@ package de.smartsquare.kickpi.matchmaking
 
 import android.util.Log
 import de.smartsquare.kickpi.Endpoints
-import de.smartsquare.kickpi.KickPiLobby
+import de.smartsquare.kickpi.domain.LobbyViewModel
 import de.smartsquare.kickpi.gameserver.State
 import de.smartsquare.kickpi.toKickprotocolLobby
 import de.smartsquare.kickprotocol.Kickprotocol
@@ -15,7 +15,7 @@ import io.reactivex.functions.Consumer
 class LeaveLobbyUseCase(
     private val kickprotocol: Kickprotocol,
     private val endpoints: Endpoints,
-    private val lobby: KickPiLobby
+    private val lobby: LobbyViewModel
 ) : Consumer<MessageEvent.Message<LeaveLobbyMessage>> {
 
     private val TAG = "Leave Lobby Use Case"

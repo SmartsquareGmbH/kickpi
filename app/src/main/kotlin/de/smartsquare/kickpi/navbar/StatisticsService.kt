@@ -3,6 +3,7 @@ package de.smartsquare.kickpi.navbar
 import retrofit2.Call
 import retrofit2.http.GET
 
+//TODO: return error if timeout
 class StatisticsService(private val kickwayStatisticsRepository: KickwayStatisticsRepository) {
 
     fun findTopThreePlayers() = (kickwayStatisticsRepository.findTopTenSoloQPlayers()

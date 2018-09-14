@@ -3,7 +3,7 @@ package de.smartsquare.kickpi.idle
 import android.arch.lifecycle.LifecycleOwner
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import de.smartsquare.kickpi.KickPiLobby
+import de.smartsquare.kickpi.domain.LobbyViewModel
 import de.smartsquare.kickpi.gameserver.State
 import de.smartsquare.kickpi.toKickprotocolLobby
 import de.smartsquare.kickprotocol.ConnectionEvent
@@ -12,12 +12,13 @@ import de.smartsquare.kickprotocol.message.IdleMessage
 import de.smartsquare.kickprotocol.message.MatchmakingMessage
 import de.smartsquare.kickprotocol.message.PlayingMessage
 import io.reactivex.functions.Consumer
+import org.koin.standalone.KoinComponent
 
 class ConnectUseCase(
     private val kickprotocol: Kickprotocol,
-    private val lobby: KickPiLobby,
+    private val lobby: LobbyViewModel,
     private val lifecycleOwner: LifecycleOwner
-) : Consumer<ConnectionEvent> {
+) : Consumer<ConnectionEvent>, KoinComponent {
 
     override fun accept(connectionEvent: ConnectionEvent) {
         val message = when {

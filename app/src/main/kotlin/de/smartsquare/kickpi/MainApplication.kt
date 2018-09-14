@@ -8,9 +8,6 @@ import org.koin.android.ext.android.startKoin
 
 class MainApplication : Application() {
 
-    private val lobby by inject<KickPiLobby>()
-    private val peripheralManager by inject<PeripheralManager>()
-
     override fun onCreate() {
         super.onCreate()
 
