@@ -35,9 +35,12 @@ import de.smartsquare.kickprotocol.ConnectionEvent.Disconnected
 import de.smartsquare.kickprotocol.ConnectionEvent.Connected
 import de.smartsquare.kickprotocol.Kickprotocol
 import de.smartsquare.kickprotocol.filterMessages
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
+import org.jetbrains.anko.custom.async
+import org.jetbrains.anko.doAsync
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
@@ -117,20 +120,23 @@ class MainActivity : AppCompatActivity() {
     private fun subscribeToKickprotocol() {
         kickprotocol.advertise("Smartsquare HQ Kicker")
             .subscribeOn(Schedulers.io())
-            .doOnError { Log.e(TAG, it.toString())}
+            .doOnError { Log.e(TAG, it.toString()) }
             .doOnComplete { Log.i(TAG, "Advertising started") }
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe()
 
         kickprotocol.connectionEvents
             .subscribeOn(Schedulers.io())
             .filter { it is Connected }
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe(ConnectUseCase(kickprotocol, lobbyViewModel, this))
 
         kickprotocol.connectionEvents
             .subscribeOn(Schedulers.io())
             .filter { it is Disconnected }
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe { Snackbar.make(this.findViewById(android.R.id.content), "${it.endpointId} disconnected", 5000).show() }
 
@@ -138,6 +144,7 @@ class MainActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .filterMessages()
             .filter { authorizationService.isAuthorized(it.message.username, it.message.userId) }
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe(CreateGameUseCase(kickprotocol, lobbyViewModel, endpoints))
 
@@ -145,25 +152,27 @@ class MainActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .filterMessages()
             .filter { authorizationService.isAuthorized(it.message.username, it.message.userId) }
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe(JoinLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
 
         kickprotocol.startGameMessageEvents
             .subscribeOn(Schedulers.io())
             .filterMessages()
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe(StartGameUseCase(kickprotocol, endpoints, lobbyViewModel))
 
         kickprotocol.leaveLobbyMessageEvents
             .subscribeOn(Schedulers.io())
             .filterMessages()
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe(LeaveLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
     }
 
     private fun subscribeTo(gpio: String, callback: () -> Unit) {
         peripheralManager.open(gpio)
-            .subscribeOn(Schedulers.io())
             .throttleFirst(5, SECONDS, Schedulers.computation())
             .autoDisposable(this.scope())
             .subscribe(ScoreUseCase(kickprotocol, lobbyViewModel, callback, gameRepository))
