@@ -1,6 +1,15 @@
 package de.smartsquare.kickpi
 
 import android.app.Application
+import com.google.android.gms.nearby.Nearby
+import com.google.android.gms.nearby.connection.AdvertisingOptions
+import com.google.android.gms.nearby.connection.ConnectionInfo
+import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback
+import com.google.android.gms.nearby.connection.ConnectionResolution
+import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo
+import com.google.android.gms.nearby.connection.DiscoveryOptions
+import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback
+import com.google.android.gms.nearby.connection.Strategy
 import com.google.android.gms.nearby.messages.MessagesClient
 import de.smartsquare.kickpi.create.CreateLobbyUseCase
 import de.smartsquare.kickpi.idle.BroadcastIdleUseCase
@@ -30,6 +39,22 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+
+        Nearby.getConnectionsClient(this)
+            .startAdvertising(
+                "Smartsquare HQ",
+                "de.smartsquare.kickpi",
+                KickpiConnectionLifecycleCallback(),
+                AdvertisingOptions(Strategy.P2P_CLUSTER)
+            )
+
+        Nearby.getConnectionsClient(this)
+            .startDiscovery(
+                "de.smartsquare.kickpi",
+                KickpiDiscoveryCallback(),
+                DiscoveryOptions(Strategy.P2P_CLUSTER)
+            )
+
         DaggerContainer.builder()
             .activityModule(ActivityModule(this))
             .build()
@@ -47,4 +72,30 @@ class MainApplication : Application() {
 
         broadcastIdleUseCase.publishIdleMessage()
     }
+
+    class KickpiConnectionLifecycleCallback : ConnectionLifecycleCallback() {
+        override fun onConnectionResult(p0: String, p1: ConnectionResolution) {
+
+        }
+
+        override fun onDisconnected(p0: String) {
+        }
+
+        override fun onConnectionInitiated(p0: String, p1: ConnectionInfo) {
+            //mobile client will sich verbinden
+        }
+
+    }
+
+    class KickpiDiscoveryCallback : EndpointDiscoveryCallback() {
+        override fun onEndpointFound(p0: String, p1: DiscoveredEndpointInfo) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun onEndpointLost(p0: String) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+    }
+
 }
