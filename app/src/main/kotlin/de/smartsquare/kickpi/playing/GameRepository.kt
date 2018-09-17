@@ -1,17 +1,21 @@
 package de.smartsquare.kickpi.playing
 
-import android.util.Log
 import de.smartsquare.kickpi.domain.LobbyViewModel
 import de.smartsquare.kickpi.playing.Game.Team
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
+import org.jetbrains.anko.info
 import retrofit2.http.Body
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
-class GameRepository(private val kickchain: KickchainGameRepository) {
+class GameRepository(private val kickchain: KickchainGameRepository) : AnkoLogger {
 
-    private val TAG = "KICKPI"
+    companion object {
+        private const val RETRY_INTERVAL = 5L
+    }
 
     fun save(lobby: LobbyViewModel) {
         lobby.let {
@@ -24,11 +28,11 @@ class GameRepository(private val kickchain: KickchainGameRepository) {
             kickchain.save(game)
                 .subscribeOn(Schedulers.io())
                 .retryWhen { request ->
-                    request.delay(5, TimeUnit.SECONDS)
-                        .also { Log.i(TAG, "Error while storing [$game]. Retrying every 5 seconds.") }
+                    request.delay(RETRY_INTERVAL, TimeUnit.SECONDS)
+                        .also { error { "Error while storing [$game]. Retrying every 5 seconds." } }
                 }
                 .subscribe {
-                    Log.i(TAG, "Successfully stored $game.")
+                    info { "Successfully stored $game." }
                 }
         }
     }

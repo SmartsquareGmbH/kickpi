@@ -48,7 +48,7 @@ private val kickprotocol = module {
 }
 
 private val domain = module {
-    single { Endpoints() }
+    single { EndpointStore() }
 }
 
 private val viewModels = module {

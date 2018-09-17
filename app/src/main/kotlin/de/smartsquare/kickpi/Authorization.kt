@@ -6,7 +6,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-class Endpoints {
+class EndpointStore {
     private val endpoints = mutableMapOf<String, String>()
 
     fun register(endpointId: String, username: String) {

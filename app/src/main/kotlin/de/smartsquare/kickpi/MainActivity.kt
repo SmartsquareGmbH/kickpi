@@ -4,9 +4,9 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.things.pio.PeripheralManager
@@ -36,6 +36,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.error
+import org.jetbrains.anko.info
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
@@ -43,16 +46,20 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit.SECONDS
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AnkoLogger {
 
-    private val TAG = "KICKPI"
+    companion object {
+        private const val SNACKBAR_DURATION_IN_MS = 5000
+        private const val SKIP_NEW_GOAL_DURATION = 5L
+    }
 
     private val kickprotocol: Kickprotocol by inject() { parametersOf(this) }
     private val gameRepository: GameRepository by inject() { parametersOf(this) }
     private val peripheralManager by inject<PeripheralManager>()
-    private val endpoints by inject<Endpoints>()
+    private val endpoints by inject<EndpointStore>()
     private val authorizationService by inject<AuthorizationService>()
 
+    private val root by bindView<ViewGroup>(android.R.id.content)
     private val goldPlayer by bindView<TextView>(R.id.goldPlayer)
     private val goldIcon by bindView<ImageView>(R.id.goldIcon)
     private val silverPlayer by bindView<TextView>(R.id.silverPlayer)
@@ -105,18 +112,19 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun subscribeToRxJavaErrors() {
+
         RxJavaPlugins.setErrorHandler { wrappedError ->
             wrappedError.cause?.message
-                ?.also { Log.i("Error", it) }
-                ?.also { Snackbar.make(this.findViewById(android.R.id.content), it, 5000).show() }
+                ?.also { info { it } }
+                ?.also { Snackbar.make(root, it, SNACKBAR_DURATION_IN_MS).show() }
         }
     }
 
     private fun subscribeToKickprotocol() {
         kickprotocol.advertise("Smartsquare HQ Kicker")
             .subscribeOn(Schedulers.io())
-            .doOnError { Log.e(TAG, it.toString()) }
-            .doOnComplete { Log.i(TAG, "Advertising started") }
+            .doOnError { error { it } }
+            .doOnComplete { info { "Advertising started" } }
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe()
@@ -133,7 +141,7 @@ class MainActivity : AppCompatActivity() {
             .filter { it is Disconnected }
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
-            .subscribe { Snackbar.make(this.findViewById(android.R.id.content), "${it.endpointId} disconnected", 5000).show() }
+            .subscribe { Snackbar.make(root, "${it.endpointId} disconnected", SNACKBAR_DURATION_IN_MS).show() }
 
         kickprotocol.createGameMessageEvents
             .subscribeOn(Schedulers.io())
@@ -168,7 +176,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun subscribeTo(gpio: String, callback: () -> Unit) {
         peripheralManager.open(gpio)
-            .throttleFirst(5, SECONDS, Schedulers.computation())
+            .throttleFirst(SKIP_NEW_GOAL_DURATION, SECONDS, Schedulers.computation())
             .autoDisposable(this.scope())
             .subscribe(ScoreUseCase(kickprotocol, lobbyViewModel, callback, gameRepository))
     }

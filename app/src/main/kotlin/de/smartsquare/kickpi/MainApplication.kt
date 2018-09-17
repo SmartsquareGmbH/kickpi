@@ -5,6 +5,7 @@ import android.net.TrafficStats
 import com.kirillr.strictmodehelper.StrictModeCompat
 import org.koin.android.ext.android.startKoin
 
+@Suppress("MagicNumber")
 class MainApplication : Application() {
 
     override fun onCreate() {

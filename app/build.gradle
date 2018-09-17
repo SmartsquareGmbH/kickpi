@@ -21,6 +21,7 @@ android {
             buildConfigField "String", "KICKWAY_URL", "\"${getFromSecrets("KICKWAY_URL")}\""
             buildConfigField "String", "LEFT_GOAL_GPIO", "\"${getFromSecrets("LEFT_GOAL_GPIO")}\""
             buildConfigField "String", "RIGHT_GOAL_GPIO", "\"${getFromSecrets("RIGHT_GOAL_GPIO")}\""
+            buildConfigField "String", "SCORE_TO_FINISH_GAME", "\"${getFromSecrets("SCORE_TO_FINISH_GAME")}\""
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -29,6 +30,7 @@ android {
             buildConfigField "String", "KICKWAY_URL", "\"${getFromSecrets("KICKWAY_URL")}\""
             buildConfigField "String", "LEFT_GOAL_GPIO", "\"${getFromSecrets("LEFT_GOAL_GPIO")}\""
             buildConfigField "String", "RIGHT_GOAL_GPIO", "\"${getFromSecrets("RIGHT_GOAL_GPIO")}\""
+            buildConfigField "String", "SCORE_TO_FINISH_GAME", "\"${getFromSecrets("SCORE_TO_FINISH_GAME")}\""
         }
     }
     lintOptions {
@@ -111,7 +113,6 @@ static String getFromSecrets(String key) {
     }
 
     Properties result = new Properties()
-
     try {
         result.load(new FileInputStream(new File("secrets.properties")))
     } catch (Exception ignored) {

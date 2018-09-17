@@ -1,6 +1,6 @@
 package de.smartsquare.kickpi.playing
 
-import android.util.Log
+import de.smartsquare.kickpi.BuildConfig.SCORE_TO_FINISH_GAME
 import de.smartsquare.kickpi.domain.LobbyViewModel
 import de.smartsquare.kickpi.domain.State
 import de.smartsquare.kickpi.domain.State.Matchmaking
@@ -9,7 +9,9 @@ import de.smartsquare.kickprotocol.Kickprotocol
 import de.smartsquare.kickprotocol.message.IdleMessage
 import de.smartsquare.kickprotocol.message.PlayingMessage
 import io.reactivex.functions.Consumer
+import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.info
 import java.lang.Thread.sleep
 
 class ScoreUseCase(
@@ -17,19 +19,23 @@ class ScoreUseCase(
     private val lobby: LobbyViewModel,
     private val onGoalCallback: () -> Unit,
     private val gameRepository: GameRepository
-) : Consumer<Unit> {
+) : Consumer<Unit>, AnkoLogger {
 
-    private val TAG = "KICKPI"
+    companion object {
+        private const val MILLISECONDS_BEFORE_END_GAME = 5000L
+    }
 
     override fun accept(unit: Unit?) {
         if (lobby currentlyIn State.Idle || lobby currentlyIn Matchmaking) {
-            Log.i(TAG, "Skipped a gpio edge because no match is in progress.")
+            info { "Skipped a gpio edge because no match is in progress." }
+
             return
         }
 
-        onGoalCallback().also { Log.i(TAG, "Goal scored.") }
+        onGoalCallback().also { info { "Goal scored." } }
 
-        if (lobby.scoreLeft.value < 10 && lobby.scoreRight.value < 10) {
+        if (lobby.scoreLeft.value < SCORE_TO_FINISH_GAME.toInt() &&
+            lobby.scoreRight.value < SCORE_TO_FINISH_GAME.toInt()) {
             kickprotocol.broadcastAndAwait(PlayingMessage(lobby.toKickprotocolLobby())).subscribe()
         } else {
             kickprotocol.broadcastAndAwait(PlayingMessage(lobby.toKickprotocolLobby())).subscribe()
@@ -37,7 +43,7 @@ class ScoreUseCase(
             gameRepository.save(lobby)
 
             doAsync {
-                sleep(5000)
+                sleep(MILLISECONDS_BEFORE_END_GAME)
                 kickprotocol.broadcastAndAwait(IdleMessage()).subscribe()
             }
         }

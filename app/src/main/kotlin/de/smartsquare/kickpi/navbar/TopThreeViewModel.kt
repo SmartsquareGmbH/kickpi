@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit.SECONDS
 
+@Suppress("MagicNumber")
 class TopThreeViewModel(statisticsRepository: StatisticsRepository) : ViewModel() {
 
     val firstPlace: MutableLiveData<String> = MutableLiveData()
