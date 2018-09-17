@@ -45,13 +45,6 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 class MainActivity : AppCompatActivity() {
 
-    private inline fun View.showIfContentAvailable() =
-        Observer<String> {
-            if (it.isNullOrBlank().not()) {
-                this.visibility = VISIBLE
-            }
-        }
-
     private val kickprotocol: Kickprotocol by inject() { parametersOf(this) }
     private val gameRepository: GameRepository by inject() { parametersOf(this) }
     private val peripheralManager by inject<PeripheralManager>()
@@ -72,42 +65,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         bindScope(getOrCreateScope("activity"))
 
-        initializeTopThree()
+        observeViewModel()
+        subscribeToKickprotocol()
+        subscribeTo(LEFT_GOAL_GPIO) { lobbyViewModel.score(Position.LEFT) }
+        subscribeTo(RIGHT_GOAL_GPIO) { lobbyViewModel.score(Position.RIGHT) }
+        subscribeToRxJavaErrors()
+        showLobbyFragment()
+    }
 
-        val lobbyFragment = LobbyFragment()
-        val lobbyFragmentTransaction = supportFragmentManager.beginTransaction()
-        lobbyFragmentTransaction.add(R.id.fragmentcontainer, lobbyFragment)
-        lobbyFragmentTransaction.commit()
+    private fun observeViewModel() {
+        topThreeViewModel.firstPlace.observe(this, Observer(goldPlayer::setText))
+        topThreeViewModel.firstPlace.observe(this, goldIcon.showIfContentAvailable())
+        topThreeViewModel.secondPlace.observe(this, Observer(silverPlayer::setText))
+        topThreeViewModel.secondPlace.observe(this, silverIcon.showIfContentAvailable())
+        topThreeViewModel.thirdPlace.observe(this, Observer(bronzePlayer::setText))
+        topThreeViewModel.thirdPlace.observe(this, bronzeIcon.showIfContentAvailable())
 
-        RxJavaPlugins.setErrorHandler {
-            Log.i("Error in Activity", it.cause?.message)
-            it.cause?.message?.let { it1 -> Snackbar.make(this.findViewById(android.R.id.content), it1, 5000).show() }
-        }
-
-        mapOf(
-            LEFT_GOAL_GPIO to { lobbyViewModel.score(Position.LEFT) },
-            RIGHT_GOAL_GPIO to { lobbyViewModel.score(Position.RIGHT) }
-        ).forEach { gpio, callback ->
-            peripheralManager.open(gpio)
-                .throttleFirst(5, SECONDS, Schedulers.computation())
-                .autoDisposable(this.scope())
-                .subscribe(ScoreUseCase(kickprotocol, lobbyViewModel, callback, gameRepository))
-        }
-
-        kickprotocol.advertise("Smartsquare HQ Kicker")
-            .autoDisposable(this.scope())
-            .subscribe()
-        kickprotocol.connectionEvents
-            .filter { it is Connected }
-            .autoDisposable(this.scope())
-            .subscribe(ConnectUseCase(kickprotocol, lobbyViewModel, this))
-
-        kickprotocol.createGameMessageEvents
-            .filterMessages()
-            .autoDisposable(this.scope())
-            .subscribe(CreateGameUseCase(kickprotocol, lobbyViewModel, endpoints))
-        lobbyViewModel.state.observe(this, Observer {
-            val fragment = when (it) {
+        lobbyViewModel.state.observe(this, Observer { state ->
+            val fragment = when (state) {
                 State.Matchmaking -> MatchmakingFragment()
                 State.Playing -> ScoreFragment()
                 else -> LobbyFragment()
@@ -116,30 +91,73 @@ class MainActivity : AppCompatActivity() {
                 replace(R.id.fragmentcontainer, fragment).also { commitNow() }
             }
         })
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun View.showIfContentAvailable() =
+        Observer<String> {
+            if (it.isNullOrBlank().not()) {
+                this.visibility = VISIBLE
+            }
+        }
+
+    private fun subscribeToKickprotocol() {
+        kickprotocol.advertise("Smartsquare HQ Kicker")
+            .subscribeOn(Schedulers.io())
+            .autoDisposable(this.scope())
+            .subscribe()
+
+        kickprotocol.connectionEvents
+            .subscribeOn(Schedulers.io())
+            .filter { it is Connected }
+            .autoDisposable(this.scope())
+            .subscribe(ConnectUseCase(kickprotocol, lobbyViewModel, this))
+
+        kickprotocol.createGameMessageEvents
+            .subscribeOn(Schedulers.io())
+            .filterMessages()
+            .autoDisposable(this.scope())
+            .subscribe(CreateGameUseCase(kickprotocol, lobbyViewModel, endpoints))
 
         kickprotocol.joinLobbyMessageEvents
+            .subscribeOn(Schedulers.io())
             .filterMessages()
             .autoDisposable(this.scope())
             .subscribe(JoinLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
 
         kickprotocol.startGameMessageEvents
+            .subscribeOn(Schedulers.io())
             .filterMessages()
             .autoDisposable(this.scope())
             .subscribe(StartGameUseCase(kickprotocol, endpoints, lobbyViewModel))
+
         kickprotocol.leaveLobbyMessageEvents
+            .subscribeOn(Schedulers.io())
             .filterMessages()
             .autoDisposable(this.scope())
             .subscribe(LeaveLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
-
     }
 
-    private fun initializeTopThree() {
-        topThreeViewModel.firstPlace.observe(this, Observer(goldPlayer::setText))
-        topThreeViewModel.firstPlace.observe(this, goldIcon.showIfContentAvailable())
-        topThreeViewModel.secondPlace.observe(this, Observer(silverPlayer::setText))
-        topThreeViewModel.secondPlace.observe(this, silverIcon.showIfContentAvailable())
-        topThreeViewModel.thirdPlace.observe(this, Observer(bronzePlayer::setText))
-        topThreeViewModel.thirdPlace.observe(this, bronzeIcon.showIfContentAvailable())
+    private fun subscribeTo(gpio: String, callback: () -> Unit) {
+        peripheralManager.open(gpio)
+            .subscribeOn(Schedulers.io())
+            .throttleFirst(5, SECONDS, Schedulers.computation())
+            .autoDisposable(this.scope())
+            .subscribe(ScoreUseCase(kickprotocol, lobbyViewModel, callback, gameRepository))
+    }
+
+    private fun subscribeToRxJavaErrors() {
+        RxJavaPlugins.setErrorHandler {
+            Log.i("Error in Activity", it.cause?.message)
+            it.cause?.message?.let { it1 -> Snackbar.make(this.findViewById(android.R.id.content), it1, 5000).show() }
+        }
+    }
+
+    private fun showLobbyFragment() {
+        val lobbyFragment = LobbyFragment()
+        val lobbyFragmentTransaction = supportFragmentManager.beginTransaction()
+        lobbyFragmentTransaction.add(R.id.fragmentcontainer, lobbyFragment)
+        lobbyFragmentTransaction.commit()
     }
 
     override fun onStop() {
