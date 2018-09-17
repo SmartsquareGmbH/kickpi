@@ -8,9 +8,6 @@ import android.util.Log
 import android.view.View
 import android.view.View.VISIBLE
 import android.widget.ImageView
-import android.widget.LinearLayout
-
-
 import android.widget.TextView
 import com.google.android.things.pio.PeripheralManager
 import com.uber.autodispose.android.lifecycle.scope
@@ -31,16 +28,14 @@ import de.smartsquare.kickpi.navbar.TopThreeViewModel
 import de.smartsquare.kickpi.playing.GameRepository
 import de.smartsquare.kickpi.playing.ScoreFragment
 import de.smartsquare.kickpi.playing.ScoreUseCase
-import de.smartsquare.kickprotocol.ConnectionEvent.Disconnected
 import de.smartsquare.kickprotocol.ConnectionEvent.Connected
+import de.smartsquare.kickprotocol.ConnectionEvent.Disconnected
 import de.smartsquare.kickprotocol.Kickprotocol
 import de.smartsquare.kickprotocol.filterMessages
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
-import org.jetbrains.anko.custom.async
-import org.jetbrains.anko.doAsync
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope

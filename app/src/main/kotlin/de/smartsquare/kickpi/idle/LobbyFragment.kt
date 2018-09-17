@@ -9,8 +9,9 @@ import de.smartsquare.kickpi.R
 
 class LobbyFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_lobby, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_lobby, container, false)
 }

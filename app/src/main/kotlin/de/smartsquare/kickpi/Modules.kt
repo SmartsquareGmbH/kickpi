@@ -18,7 +18,6 @@ import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 private val network = module {
     single { Moshi.Builder().build() }
 
@@ -37,7 +36,6 @@ private val network = module {
     single { AuthorizationService(get()) }
 
     single { get<Retrofit>().create(StatisticsRepository::class.java) }
-
 }
 
 private val hardware = module {

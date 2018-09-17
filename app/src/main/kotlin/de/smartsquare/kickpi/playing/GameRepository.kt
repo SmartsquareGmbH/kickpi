@@ -4,11 +4,7 @@ import android.util.Log
 import de.smartsquare.kickpi.domain.LobbyViewModel
 import de.smartsquare.kickpi.playing.Game.Team
 import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit

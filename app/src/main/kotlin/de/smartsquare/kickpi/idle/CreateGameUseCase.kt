@@ -20,7 +20,7 @@ class CreateGameUseCase(
 
     override fun accept(message: MessageEvent.Message<CreateGameMessage>) {
         endpoints.register(message.endpointId, message.message.username)
-        lobby.startMatchmaking(lobbyOwner = message.message.username, lobbyName = "Haus Dejavu") //TODO: name generator
+        lobby.startMatchmaking(lobbyOwner = message.message.username, lobbyName = "Haus Dejavu") // TODO: name generator
         Log.i(TAG, "Game created by ${message.message.username}")
         kickprotocol.broadcastAndAwait(MatchmakingMessage(lobby.toKickprotocolLobby()))
             .subscribe()

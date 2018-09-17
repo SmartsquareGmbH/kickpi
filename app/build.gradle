@@ -31,6 +31,9 @@ android {
             buildConfigField "String", "RIGHT_GOAL_GPIO", "\"${getFromSecrets("RIGHT_GOAL_GPIO")}\""
         }
     }
+    lintOptions {
+        abortOnError false
+    }
     testOptions {
         unitTests.returnDefaultValues = true
     }

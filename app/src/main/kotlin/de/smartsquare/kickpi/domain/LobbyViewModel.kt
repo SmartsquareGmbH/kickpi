@@ -80,5 +80,4 @@ class LobbyViewModel : ViewModel() {
     }
 
     infix fun currentlyIn(state: State) = this.state.value == state
-
 }

@@ -19,16 +19,16 @@ class ScoreFragment : Fragment() {
     private val leftScore by bindView<TextView>(R.id.scoreLeft)
     private val rightScore by bindView<TextView>(R.id.scoreRight)
 
-
     private val firstPlayerOfLeftTeam by bindView<TextView>(R.id.firstPlayerOfLeftTeam)
     private val secondPlayerOfLeftTeam by bindView<TextView>(R.id.secondPlayerOfLeftTeam)
     private val firstPlayerOfRightTeam by bindView<TextView>(R.id.firstPlayerOfRightTeam)
     private val secondPlayerOfRightTeam by bindView<TextView>(R.id.secondPlayerOfRightTeam)
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_score, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_score, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

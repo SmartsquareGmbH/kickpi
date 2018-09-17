@@ -1,7 +1,6 @@
 package de.smartsquare.kickpi.matchmaking
 
 import android.arch.lifecycle.Observer
-import android.graphics.Typeface
 import android.graphics.Typeface.DEFAULT
 import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
@@ -17,7 +16,6 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class MatchmakingFragment : Fragment() {
 
-
     private val lobbyViewModel by sharedViewModel<LobbyViewModel>()
 
     private val firstPlayerOfLeftTeam by bindView<TextView>(R.id.firstPlayerLeft)
@@ -26,11 +24,11 @@ class MatchmakingFragment : Fragment() {
     private val secondPlayerOfRightTeam by bindView<TextView>(R.id.secondPlayerRight)
     private val connectionCount by bindView<TextView>(R.id.connectionCount)
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_matchmaking, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_matchmaking, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +50,4 @@ class MatchmakingFragment : Fragment() {
         lobbyViewModel.rightTeam.observe(this, updateUIOnTeamUpdate)
         lobbyViewModel.leftTeam.observe(this, updateUIOnTeamUpdate)
     }
-
-
 }
