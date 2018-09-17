@@ -112,7 +112,6 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         }
 
     private fun subscribeToRxJavaErrors() {
-
         RxJavaPlugins.setErrorHandler { wrappedError ->
             wrappedError.cause?.message
                 ?.also { info { it } }
@@ -182,10 +181,9 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
     }
 
     private fun showLobbyFragment() {
-        val lobbyFragment = LobbyFragment()
-        val lobbyFragmentTransaction = supportFragmentManager.beginTransaction()
-        lobbyFragmentTransaction.add(R.id.fragmentcontainer, lobbyFragment)
-        lobbyFragmentTransaction.commit()
+        with(supportFragmentManager.beginTransaction()) {
+            add(R.id.fragmentcontainer, LobbyFragment()).also { commitNow() }
+        }
     }
 
     override fun onStop() {
