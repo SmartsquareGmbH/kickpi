@@ -9,7 +9,7 @@ import de.smartsquare.kickpi.domain.State.Idle
 import de.smartsquare.kickpi.domain.State.Matchmaking
 import de.smartsquare.kickpi.domain.State.Playing
 
-class LobbyViewModel : ViewModel(){
+class LobbyViewModel : ViewModel() {
 
     val name = MutableLiveData<String>()
     val owner = MutableLiveData<String>()
@@ -25,9 +25,9 @@ class LobbyViewModel : ViewModel(){
         if (this currentlyIn Matchmaking || this currentlyIn Playing) throw IllegalStateException("Unable to create lobby in state ${state.value}.")
 
         this.state.postValue(Matchmaking)
-        this.leftTeam.value = listOf(lobbyOwner)
-        this.owner.value = lobbyOwner
-        this.name.value = lobbyName
+        this.leftTeam.postValue(listOf(lobbyOwner))
+        this.owner.postValue(lobbyOwner)
+        this.name.postValue(lobbyName)
     }
 
     fun join(position: Position, name: String) {
@@ -38,7 +38,7 @@ class LobbyViewModel : ViewModel(){
             if (value.size > 1) throw TeamIsFullException("$name tried to join the game but the team was already full.")
             if (rightTeam.value.contains(name).or(leftTeam.value.contains(name))) throw PlayerAlreadyInGameException("$name tried to join the game twice.")
 
-            value += name
+            postValue(value + name)
         }
     }
 
@@ -48,22 +48,22 @@ class LobbyViewModel : ViewModel(){
 
         val allPlayers = leftTeam.value + rightTeam.value
         if (allPlayers == listOf(name)) {
-            state.value = Idle
-            owner.value = null
+            state.postValue(Idle)
+            owner.postValue(null)
         } else if (name.equals(owner.value)) {
             val nextOwner = (leftTeam.value + rightTeam.value - name).first()
-            owner.value = nextOwner
+            owner.postValue(nextOwner)
         }
 
-        rightTeam.value = rightTeam.value - name
-        leftTeam.value = leftTeam.value - name
+        rightTeam.postValue(rightTeam.value - name)
+        leftTeam.postValue(leftTeam.value - name)
     }
 
     fun startGame(name: String) {
         if (leftTeam.value.isEmpty().or(rightTeam.value.isEmpty())) throw IllegalStateException()
-        if (name.equals(owner.value).not()) throw UnauthorizedException("$name tried to start the game but the owner is ${owner.value}.")
+        if ((name == owner.value).not()) throw UnauthorizedException("$name tried to start the game but the owner is ${owner.value}.")
 
-        state.value = Playing
+        state.postValue(Playing)
     }
 
     fun score(position: Position) {
@@ -74,8 +74,8 @@ class LobbyViewModel : ViewModel(){
             RIGHT -> scoreRight.postValue(scoreRight.value + 1)
         }
 
-        if(scoreLeft.value == 10 || scoreRight.value == 10) {
-            this.state.value = Idle
+        if (scoreLeft.value == 10 || scoreRight.value == 10) {
+            this.state.postValue(Idle)
         }
     }
 
