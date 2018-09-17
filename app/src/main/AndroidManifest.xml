@@ -10,12 +10,16 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <application android:name=".MainApplication">
+    <application android:name=".MainApplication" android:theme="@style/Theme.App">
+
         <uses-library android:name="com.google.android.things" />
 
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyAEdanH_AkiR8XDBQQWg5faKlzb7vi8rjA" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".MainActivity">
             <intent-filter>

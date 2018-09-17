@@ -4,27 +4,28 @@ import com.squareup.moshi.JsonClass
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.POST
-import javax.inject.Inject
 
-class AuthorizationService @Inject constructor(private val authorizationRepository: AuthorizationRepository) {
+class Endpoints {
+    private val endpoints = mutableMapOf<String, String>()
 
-    fun authorize(name: String, deviceId: String) {
-        val credentials = Credentials(deviceId, name)
-        val authorizationResponse = authorizationRepository.authorize(credentials).execute()
-
-        if (authorizationResponse.isSuccessful.not()) throw UnauthorizedException()
+    fun register(endpointId: String, username: String) {
+        endpoints[endpointId] = username
     }
+
+    fun getIfAuthorized(endpointId: String) = endpoints[endpointId]
 }
 
-interface AuthorizationRepository {
+class AuthorizationService(private val authorizationRepository: KickwayAuthorizationRepository) {
+
+    fun isAuthorized(name: String, deviceId: String) =
+        authorizationRepository.authorize(Credentials(deviceId, name)).execute().isSuccessful
+}
+
+interface KickwayAuthorizationRepository {
 
     @POST("authorization")
     fun authorize(@Body credentials: Credentials): Call<ResponseBody>
-
-    @DELETE("authorization")
-    fun unauthorize(@Body credentials: Credentials): Call<ResponseBody>
 }
 
 @JsonClass(generateAdapter = true)

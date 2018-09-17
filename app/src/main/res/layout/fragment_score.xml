@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".playing.ScoreFragment"
+    app:layout_constraintVertical_bias="0.8">
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left"
+        app:constraint_referenced_ids="goldPlayer, silverPlayer, bronzePlayer"
+        tools:layout_editor_absoluteX="903dp" />
+
+    <TextView
+        android:id="@+id/scoreLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="180sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintEnd_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/scoreRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="180sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="-"
+        android:textSize="140sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/secondPlayerOfLeftTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="@+id/scoreLeft"
+        app:layout_constraintEnd_toStartOf="@+id/scoreLeft"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="saschar" />
+
+    <TextView
+        android:id="@+id/secondPlayerOfRightTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toBottomOf="@+id/scoreRight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/scoreRight"
+        tools:text="drs" />
+
+    <TextView
+        android:id="@+id/firstPlayerOfRightTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="56dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/scoreRight"
+        app:layout_constraintTop_toTopOf="@+id/scoreRight"
+        tools:text="ruby" />
+
+    <TextView
+        android:id="@+id/firstPlayerOfLeftTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="52dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toStartOf="@+id/scoreLeft"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/scoreLeft"
+        tools:text="deen" />
+
+</android.support.constraint.ConstraintLayout>
