@@ -19,7 +19,7 @@ class ScoreUseCase(
     private val gameRepository: GameRepository
 ) : Consumer<Unit> {
 
-    private val TAG = "GPIO Callback"
+    private val TAG = "KICKPI"
 
     override fun accept(unit: Unit?) {
         if (lobby currentlyIn State.Idle || lobby currentlyIn Matchmaking) {

@@ -18,7 +18,7 @@ class LeaveLobbyUseCase(
     private val lobby: LobbyViewModel
 ) : Consumer<MessageEvent.Message<LeaveLobbyMessage>> {
 
-    private val TAG = "Leave Lobby Use Case"
+    private val TAG = "KICKPI"
 
     override fun accept(message: MessageEvent.Message<LeaveLobbyMessage>) {
         endpoints.getIfAuthorized(message.endpointId)

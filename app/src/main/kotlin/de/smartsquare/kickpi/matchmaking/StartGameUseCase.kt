@@ -16,7 +16,7 @@ class StartGameUseCase(
     private val lobby: LobbyViewModel
 ) : Consumer<MessageEvent.Message<StartGameMessage>> {
 
-    private val TAG = "Start Game Use Case"
+    private val TAG = "KICKPI"
 
     override fun accept(message: MessageEvent.Message<StartGameMessage>) {
         endpoints.getIfAuthorized(message.endpointId)

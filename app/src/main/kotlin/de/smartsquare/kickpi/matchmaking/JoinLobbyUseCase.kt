@@ -17,7 +17,7 @@ class JoinLobbyUseCase(
     private val lobby: LobbyViewModel
 ) : Consumer<MessageEvent.Message<JoinLobbyMessage>> {
 
-    private val TAG = "Join Lobby Use Case"
+    private val TAG = "KICKPI"
 
     override fun accept(message: MessageEvent.Message<JoinLobbyMessage>) {
         endpoints.register(message.endpointId, message.message.username)

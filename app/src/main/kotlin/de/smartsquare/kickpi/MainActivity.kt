@@ -47,6 +47,8 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 class MainActivity : AppCompatActivity() {
 
+    private val TAG = "KICKPI"
+
     private val kickprotocol: Kickprotocol by inject() { parametersOf(this) }
     private val gameRepository: GameRepository by inject() { parametersOf(this) }
     private val peripheralManager by inject<PeripheralManager>()
@@ -115,6 +117,8 @@ class MainActivity : AppCompatActivity() {
     private fun subscribeToKickprotocol() {
         kickprotocol.advertise("Smartsquare HQ Kicker")
             .subscribeOn(Schedulers.io())
+            .doOnError { Log.e(TAG, it.toString())}
+            .doOnComplete { Log.i(TAG, "Advertising started") }
             .autoDisposable(this.scope())
             .subscribe()
 

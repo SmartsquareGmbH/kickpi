@@ -16,7 +16,7 @@ class CreateGameUseCase(
     private val endpoints: Endpoints
 ) : Consumer<MessageEvent.Message<CreateGameMessage>> {
 
-    private val TAG = "Create Game Use Case"
+    private val TAG = "KICKPI"
 
     override fun accept(message: MessageEvent.Message<CreateGameMessage>) {
         endpoints.register(message.endpointId, message.message.username)
