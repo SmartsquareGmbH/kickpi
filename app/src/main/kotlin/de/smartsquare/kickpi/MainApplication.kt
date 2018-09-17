@@ -1,6 +1,7 @@
 package de.smartsquare.kickpi
 
 import android.app.Application
+import android.net.TrafficStats
 import com.google.android.things.pio.PeripheralManager
 import com.kirillr.strictmodehelper.StrictModeCompat
 import org.koin.android.ext.android.inject
@@ -11,6 +12,7 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        TrafficStats.setThreadStatsTag(1000);
         startKoin(this, modules)
 
         if (BuildConfig.DEBUG) {
