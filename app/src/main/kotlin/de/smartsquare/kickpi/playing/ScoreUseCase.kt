@@ -4,6 +4,7 @@ import de.smartsquare.kickpi.BuildConfig.SCORE_TO_FINISH_GAME
 import de.smartsquare.kickpi.domain.LobbyViewModel
 import de.smartsquare.kickpi.domain.State
 import de.smartsquare.kickpi.domain.State.Matchmaking
+import de.smartsquare.kickpi.domain.State.Idle
 import de.smartsquare.kickpi.toKickprotocolLobby
 import de.smartsquare.kickprotocol.Kickprotocol
 import de.smartsquare.kickprotocol.message.IdleMessage
@@ -26,7 +27,7 @@ class ScoreUseCase(
     }
 
     override fun accept(unit: Unit?) {
-        if (lobby currentlyIn State.Idle || lobby currentlyIn Matchmaking) {
+        if (lobby currentlyIn Idle || lobby currentlyIn Matchmaking) {
             info { "Skipped a gpio edge because no match is in progress." }
 
             return
