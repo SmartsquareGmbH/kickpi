@@ -5,6 +5,11 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
+import android.view.View.VISIBLE
+import android.widget.ImageView
+
+
 import android.widget.TextView
 import com.google.android.things.pio.PeripheralManager
 import com.uber.autodispose.android.lifecycle.scope
@@ -40,14 +45,24 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 class MainActivity : AppCompatActivity() {
 
+    private inline fun View.showIfContentAvailable() =
+        Observer<String> {
+            if (it.isNullOrBlank().not()) {
+                this.visibility = VISIBLE
+            }
+        }
+
     private val kickprotocol: Kickprotocol by inject() { parametersOf(this) }
     private val gameRepository: GameRepository by inject() { parametersOf(this) }
     private val peripheralManager by inject<PeripheralManager>()
     private val endpoints by inject<Endpoints>()
 
     private val goldPlayer by bindView<TextView>(R.id.goldPlayer)
+    private val goldIcon by bindView<ImageView>(R.id.goldIcon)
     private val silverPlayer by bindView<TextView>(R.id.silverPlayer)
+    private val silverIcon by bindView<ImageView>(R.id.silverIcon)
     private val bronzePlayer by bindView<TextView>(R.id.bronzePlayer)
+    private val bronzeIcon by bindView<ImageView>(R.id.bronzeIcon)
 
     private val topThreeViewModel by viewModel<TopThreeViewModel>()
     private val lobbyViewModel by viewModel<LobbyViewModel>()
@@ -55,19 +70,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        topThreeViewModel.firstPlace.observe(this, Observer {
-            goldPlayer.text = it
-        })
-        topThreeViewModel.secondPlace.observe(this, Observer {
-            silverPlayer.text = it
-        })
-        topThreeViewModel.thirdPlace.observe(this, Observer {
-            bronzePlayer.text = it
-        })
-
         bindScope(getOrCreateScope("activity"))
+
+        initializeTopThree()
 
         val lobbyFragment = LobbyFragment()
         val lobbyFragmentTransaction = supportFragmentManager.beginTransaction()
@@ -126,6 +131,15 @@ class MainActivity : AppCompatActivity() {
             .autoDisposable(this.scope())
             .subscribe(LeaveLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
 
+    }
+
+    private fun initializeTopThree() {
+        topThreeViewModel.firstPlace.observe(this, Observer(goldPlayer::setText))
+        topThreeViewModel.firstPlace.observe(this, goldIcon.showIfContentAvailable())
+        topThreeViewModel.secondPlace.observe(this, Observer(silverPlayer::setText))
+        topThreeViewModel.secondPlace.observe(this, silverIcon.showIfContentAvailable())
+        topThreeViewModel.thirdPlace.observe(this, Observer(bronzePlayer::setText))
+        topThreeViewModel.thirdPlace.observe(this, bronzeIcon.showIfContentAvailable())
     }
 
     override fun onStop() {

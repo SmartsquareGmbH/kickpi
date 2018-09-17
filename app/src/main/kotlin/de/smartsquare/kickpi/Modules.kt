@@ -4,16 +4,11 @@ import android.app.Activity
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.things.pio.PeripheralManager
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.squareup.moshi.Moshi
 import de.smartsquare.kickpi.BuildConfig.KICKWAY_URL
 import de.smartsquare.kickpi.domain.LobbyViewModel
-import de.smartsquare.kickpi.idle.ConnectUseCase
-import de.smartsquare.kickpi.idle.CreateGameUseCase
-import de.smartsquare.kickpi.matchmaking.JoinLobbyUseCase
-import de.smartsquare.kickpi.matchmaking.LeaveLobbyUseCase
-import de.smartsquare.kickpi.matchmaking.StartGameUseCase
-import de.smartsquare.kickpi.navbar.KickwayStatisticsRepository
-import de.smartsquare.kickpi.navbar.StatisticsService
+import de.smartsquare.kickpi.navbar.StatisticsRepository
 import de.smartsquare.kickpi.navbar.TopThreeViewModel
 import de.smartsquare.kickpi.playing.GameRepository
 import de.smartsquare.kickpi.playing.KickchainGameRepository
@@ -29,6 +24,7 @@ private val network = module {
 
     single {
         Retrofit.Builder()
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(KICKWAY_URL)
             .build()
@@ -38,9 +34,7 @@ private val network = module {
 
     single { get<Retrofit>().create(KickwayAuthorizationRepository::class.java) }
 
-    single { get<Retrofit>().create(KickwayStatisticsRepository::class.java) }
-
-    factory { StatisticsService(get()) }
+    single { get<Retrofit>().create(StatisticsRepository::class.java) }
 
     factory { GameRepository(get()) }
 }

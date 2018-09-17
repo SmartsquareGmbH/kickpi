@@ -2,17 +2,23 @@ package de.smartsquare.kickpi.navbar
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit.SECONDS
 
-class TopThreeViewModel(statisticsService: StatisticsService) : ViewModel() {
+class TopThreeViewModel(statisticsRepository: StatisticsRepository) : ViewModel() {
+
     val firstPlace: MutableLiveData<String> = MutableLiveData()
     val secondPlace: MutableLiveData<String> = MutableLiveData()
     val thirdPlace: MutableLiveData<String> = MutableLiveData()
 
     init {
-        with(statisticsService.findTopThreePlayers()) {
-            getOrElse(0) { "" }.also(firstPlace::setValue)
-            getOrElse(1) { "" }.also(secondPlace::setValue)
-            getOrElse(2) { "" }.also(thirdPlace::setValue)
-        }
+        statisticsRepository.findTopTenDuoQPlayers()
+            .subscribeOn(Schedulers.io())
+            .retryWhen { it.delay(5, SECONDS) }
+            .subscribe { players ->
+                players.getTop(1).playerNameOrEmptyString().also(firstPlace::postValue)
+                players.getTop(2).playerNameOrEmptyString().also(secondPlace::postValue)
+                players.getTop(3).playerNameOrEmptyString().also(thirdPlace::postValue)
+            }
     }
 }
