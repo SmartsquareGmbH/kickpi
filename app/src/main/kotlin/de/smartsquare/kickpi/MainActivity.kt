@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
     private val gameRepository: GameRepository by inject() { parametersOf(this) }
     private val peripheralManager by inject<PeripheralManager>()
     private val endpoints by inject<EndpointStore>()
-    private val authorizationService by inject<AuthorizationService>()
+    private val authorizationRepository by inject<AuthorizationRepository>()
 
     private val root by bindView<ViewGroup>(android.R.id.content)
     private val goldPlayer by bindView<TextView>(R.id.goldPlayer)
@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         kickprotocol.createGameMessageEvents
             .subscribeOn(Schedulers.io())
             .filterMessages()
-            .filter { authorizationService.isAuthorized(it.message.username, it.message.userId) }
+            .filterAuthenticatedCreateGameMessages(authorizationRepository)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe(CreateGameUseCase(kickprotocol, lobbyViewModel, endpoints))
@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         kickprotocol.joinLobbyMessageEvents
             .subscribeOn(Schedulers.io())
             .filterMessages()
-            .filter { authorizationService.isAuthorized(it.message.username, it.message.userId) }
+            .filterAuthenticatedJoinLobbyMessages(authorizationRepository)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe(JoinLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
