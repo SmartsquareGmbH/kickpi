@@ -43,7 +43,7 @@ class MatchmakingFragment : Fragment() {
 
             listOf(firstPlayerOfLeftTeam, secondPlayerOfLeftTeam, firstPlayerOfRightTeam, secondPlayerOfRightTeam)
                 .forEach {
-                    it.typeface = if (lobbyViewModel.owner == it.text) DEFAULT_BOLD else DEFAULT
+                    it.typeface = if (lobbyViewModel.owner.value == it.text) DEFAULT_BOLD else DEFAULT
                 }
 
             connectionCount.text = (lobbyViewModel.leftTeam.value.size + lobbyViewModel.rightTeam.value.size).toString()
