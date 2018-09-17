@@ -1,6 +1,9 @@
 package de.smartsquare.kickpi.matchmaking
 
 import android.arch.lifecycle.Observer
+import android.graphics.Typeface
+import android.graphics.Typeface.DEFAULT
+import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -33,10 +36,15 @@ class MatchmakingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val updateUIOnTeamUpdate = Observer<List<String>> { _ ->
-            lobbyViewModel.leftTeam.value.getOrElse(0) {""}.also(firstPlayerOfLeftTeam::setText)
-            lobbyViewModel.leftTeam.value.getOrElse(1) {""}.also(secondPlayerOfLeftTeam::setText)
-            lobbyViewModel.rightTeam.value.getOrElse(0) {""}.also(firstPlayerOfRightTeam::setText)
-            lobbyViewModel.rightTeam.value.getOrElse(1) {""}.also(secondPlayerOfRightTeam::setText)
+            lobbyViewModel.leftTeam.value.getOrElse(0) { "" }.also(firstPlayerOfLeftTeam::setText)
+            lobbyViewModel.leftTeam.value.getOrElse(1) { "" }.also(secondPlayerOfLeftTeam::setText)
+            lobbyViewModel.rightTeam.value.getOrElse(0) { "" }.also(firstPlayerOfRightTeam::setText)
+            lobbyViewModel.rightTeam.value.getOrElse(1) { "" }.also(secondPlayerOfRightTeam::setText)
+
+            listOf(firstPlayerOfLeftTeam, secondPlayerOfLeftTeam, firstPlayerOfRightTeam, secondPlayerOfRightTeam)
+                .forEach {
+                    it.typeface = if (lobbyViewModel.owner == it.text) DEFAULT_BOLD else DEFAULT
+                }
 
             connectionCount.text = (lobbyViewModel.leftTeam.value.size + lobbyViewModel.rightTeam.value.size).toString()
         }
