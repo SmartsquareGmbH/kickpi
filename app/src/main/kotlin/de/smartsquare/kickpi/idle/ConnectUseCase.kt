@@ -4,7 +4,7 @@ import android.arch.lifecycle.LifecycleOwner
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import de.smartsquare.kickpi.domain.LobbyViewModel
-import de.smartsquare.kickpi.gameserver.State
+import de.smartsquare.kickpi.domain.State
 import de.smartsquare.kickpi.toKickprotocolLobby
 import de.smartsquare.kickprotocol.ConnectionEvent
 import de.smartsquare.kickprotocol.Kickprotocol

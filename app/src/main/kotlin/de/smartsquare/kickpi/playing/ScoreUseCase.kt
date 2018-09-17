@@ -1,10 +1,9 @@
 package de.smartsquare.kickpi.playing
 
-import android.os.AsyncTask
 import android.util.Log
 import de.smartsquare.kickpi.domain.LobbyViewModel
-import de.smartsquare.kickpi.gameserver.State
-import de.smartsquare.kickpi.gameserver.State.Matchmaking
+import de.smartsquare.kickpi.domain.State
+import de.smartsquare.kickpi.domain.State.Matchmaking
 import de.smartsquare.kickpi.toKickprotocolLobby
 import de.smartsquare.kickprotocol.Kickprotocol
 import de.smartsquare.kickprotocol.message.IdleMessage

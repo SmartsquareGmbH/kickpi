@@ -31,12 +31,13 @@ private val network = module {
     }
 
     single { get<Retrofit>().create(KickchainGameRepository::class.java) }
+    factory { GameRepository(get()) }
 
     single { get<Retrofit>().create(KickwayAuthorizationRepository::class.java) }
+    single { AuthorizationService(get()) }
 
     single { get<Retrofit>().create(StatisticsRepository::class.java) }
 
-    factory { GameRepository(get()) }
 }
 
 private val hardware = module {

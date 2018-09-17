@@ -18,8 +18,8 @@ import com.uber.autodispose.autoDisposable
 import de.smartsquare.kickpi.BuildConfig.LEFT_GOAL_GPIO
 import de.smartsquare.kickpi.BuildConfig.RIGHT_GOAL_GPIO
 import de.smartsquare.kickpi.domain.LobbyViewModel
-import de.smartsquare.kickpi.gameserver.Position
-import de.smartsquare.kickpi.gameserver.State
+import de.smartsquare.kickpi.domain.Position
+import de.smartsquare.kickpi.domain.State
 import de.smartsquare.kickpi.idle.ConnectUseCase
 import de.smartsquare.kickpi.idle.CreateGameUseCase
 import de.smartsquare.kickpi.idle.LobbyFragment
@@ -31,7 +31,6 @@ import de.smartsquare.kickpi.navbar.TopThreeViewModel
 import de.smartsquare.kickpi.playing.GameRepository
 import de.smartsquare.kickpi.playing.ScoreFragment
 import de.smartsquare.kickpi.playing.ScoreUseCase
-import de.smartsquare.kickprotocol.ConnectionEvent
 import de.smartsquare.kickprotocol.ConnectionEvent.Disconnected
 import de.smartsquare.kickprotocol.ConnectionEvent.Connected
 import de.smartsquare.kickprotocol.Kickprotocol
@@ -60,7 +59,6 @@ class MainActivity : AppCompatActivity() {
     private val silverIcon by bindView<ImageView>(R.id.silverIcon)
     private val bronzePlayer by bindView<TextView>(R.id.bronzePlayer)
     private val bronzeIcon by bindView<ImageView>(R.id.bronzeIcon)
-    private val snackbarContainer by bindView<LinearLayout>(R.id.content)
 
     private val topThreeViewModel by viewModel<TopThreeViewModel>()
     private val lobbyViewModel by viewModel<LobbyViewModel>()
@@ -110,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         RxJavaPlugins.setErrorHandler { wrappedError ->
             wrappedError.cause?.message
                 ?.also { Log.i("Error", it) }
-                ?.also { Snackbar.make(snackbarContainer, it, 5000).show() }
+                ?.also { Snackbar.make(this.findViewById(android.R.id.content), it, 5000).show() }
         }
     }
 
@@ -130,7 +128,7 @@ class MainActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .filter { it is Disconnected }
             .autoDisposable(this.scope())
-            .subscribe { Snackbar.make(snackbarContainer, "${it.endpointId} disconnected", 5000).show() }
+            .subscribe { Snackbar.make(this.findViewById(android.R.id.content), "${it.endpointId} disconnected", 5000).show() }
 
         kickprotocol.createGameMessageEvents
             .subscribeOn(Schedulers.io())

@@ -8,6 +8,7 @@ import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.atomic.AtomicBoolean
 
+@Suppress("NOTHING_TO_INLINE")
 inline fun PeripheralManager.open(name: String): GpioObservable {
     val gpio = this.openGpio(name)
     gpio.setDirection(Gpio.DIRECTION_IN)

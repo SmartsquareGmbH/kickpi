@@ -1,4 +1,4 @@
-package de.smartsquare.kickpi.gameserver
+package de.smartsquare.kickpi.domain
 
 abstract class GameServerException(override val message: String) : RuntimeException()
 class TeamIsFullException(override val message: String) : GameServerException(message)

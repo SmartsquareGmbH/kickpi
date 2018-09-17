@@ -3,7 +3,7 @@ package de.smartsquare.kickpi.matchmaking
 import android.util.Log
 import de.smartsquare.kickpi.Endpoints
 import de.smartsquare.kickpi.domain.LobbyViewModel
-import de.smartsquare.kickpi.gameserver.State
+import de.smartsquare.kickpi.domain.State
 import de.smartsquare.kickpi.toKickprotocolLobby
 import de.smartsquare.kickprotocol.Kickprotocol
 import de.smartsquare.kickprotocol.MessageEvent

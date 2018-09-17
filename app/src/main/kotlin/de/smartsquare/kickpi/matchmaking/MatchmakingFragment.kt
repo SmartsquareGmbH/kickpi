@@ -32,7 +32,7 @@ class MatchmakingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val updateUIOnTeamUpdate = Observer<List<String>> {
+        val updateUIOnTeamUpdate = Observer<List<String>> { _ ->
             lobbyViewModel.leftTeam.value.getOrElse(0) {""}.also(firstPlayerOfLeftTeam::setText)
             lobbyViewModel.leftTeam.value.getOrElse(1) {""}.also(secondPlayerOfLeftTeam::setText)
             lobbyViewModel.rightTeam.value.getOrElse(0) {""}.also(firstPlayerOfRightTeam::setText)

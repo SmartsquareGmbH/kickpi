@@ -3,16 +3,11 @@ package de.smartsquare.kickpi.domain
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import de.smartsquare.kickpi.NonNullLiveData
-import de.smartsquare.kickpi.gameserver.PlayerAlreadyInGameException
-import de.smartsquare.kickpi.gameserver.Position
-import de.smartsquare.kickpi.gameserver.Position.LEFT
-import de.smartsquare.kickpi.gameserver.Position.RIGHT
-import de.smartsquare.kickpi.gameserver.State
-import de.smartsquare.kickpi.gameserver.State.Idle
-import de.smartsquare.kickpi.gameserver.State.Matchmaking
-import de.smartsquare.kickpi.gameserver.State.Playing
-import de.smartsquare.kickpi.gameserver.TeamIsFullException
-import de.smartsquare.kickpi.gameserver.UnauthorizedException
+import de.smartsquare.kickpi.domain.Position.LEFT
+import de.smartsquare.kickpi.domain.Position.RIGHT
+import de.smartsquare.kickpi.domain.State.Idle
+import de.smartsquare.kickpi.domain.State.Matchmaking
+import de.smartsquare.kickpi.domain.State.Playing
 
 class LobbyViewModel : ViewModel(){
 
