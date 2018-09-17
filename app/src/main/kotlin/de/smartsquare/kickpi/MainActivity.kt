@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.VISIBLE
 import android.widget.ImageView
+import android.widget.LinearLayout
 
 
 import android.widget.TextView
@@ -30,6 +31,8 @@ import de.smartsquare.kickpi.navbar.TopThreeViewModel
 import de.smartsquare.kickpi.playing.GameRepository
 import de.smartsquare.kickpi.playing.ScoreFragment
 import de.smartsquare.kickpi.playing.ScoreUseCase
+import de.smartsquare.kickprotocol.ConnectionEvent
+import de.smartsquare.kickprotocol.ConnectionEvent.Disconnected
 import de.smartsquare.kickprotocol.ConnectionEvent.Connected
 import de.smartsquare.kickprotocol.Kickprotocol
 import de.smartsquare.kickprotocol.filterMessages
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private val gameRepository: GameRepository by inject() { parametersOf(this) }
     private val peripheralManager by inject<PeripheralManager>()
     private val endpoints by inject<Endpoints>()
+    private val authorizationService by inject<AuthorizationService>()
 
     private val goldPlayer by bindView<TextView>(R.id.goldPlayer)
     private val goldIcon by bindView<ImageView>(R.id.goldIcon)
@@ -56,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     private val silverIcon by bindView<ImageView>(R.id.silverIcon)
     private val bronzePlayer by bindView<TextView>(R.id.bronzePlayer)
     private val bronzeIcon by bindView<ImageView>(R.id.bronzeIcon)
+    private val snackbarContainer by bindView<LinearLayout>(R.id.content)
 
     private val topThreeViewModel by viewModel<TopThreeViewModel>()
     private val lobbyViewModel by viewModel<LobbyViewModel>()
@@ -66,10 +71,10 @@ class MainActivity : AppCompatActivity() {
         bindScope(getOrCreateScope("activity"))
 
         observeViewModel()
+        subscribeToRxJavaErrors()
         subscribeToKickprotocol()
         subscribeTo(LEFT_GOAL_GPIO) { lobbyViewModel.score(Position.LEFT) }
         subscribeTo(RIGHT_GOAL_GPIO) { lobbyViewModel.score(Position.RIGHT) }
-        subscribeToRxJavaErrors()
         showLobbyFragment()
     }
 
@@ -101,6 +106,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    private fun subscribeToRxJavaErrors() {
+        RxJavaPlugins.setErrorHandler { wrappedError ->
+            wrappedError.cause?.message
+                ?.also { Log.i("Error", it) }
+                ?.also { Snackbar.make(snackbarContainer, it, 5000).show() }
+        }
+    }
+
     private fun subscribeToKickprotocol() {
         kickprotocol.advertise("Smartsquare HQ Kicker")
             .subscribeOn(Schedulers.io())
@@ -113,15 +126,23 @@ class MainActivity : AppCompatActivity() {
             .autoDisposable(this.scope())
             .subscribe(ConnectUseCase(kickprotocol, lobbyViewModel, this))
 
+        kickprotocol.connectionEvents
+            .subscribeOn(Schedulers.io())
+            .filter { it is Disconnected }
+            .autoDisposable(this.scope())
+            .subscribe { Snackbar.make(snackbarContainer, "${it.endpointId} disconnected", 5000).show() }
+
         kickprotocol.createGameMessageEvents
             .subscribeOn(Schedulers.io())
             .filterMessages()
+            .filter { authorizationService.isAuthorized(it.message.username, it.message.userId) }
             .autoDisposable(this.scope())
             .subscribe(CreateGameUseCase(kickprotocol, lobbyViewModel, endpoints))
 
         kickprotocol.joinLobbyMessageEvents
             .subscribeOn(Schedulers.io())
             .filterMessages()
+            .filter { authorizationService.isAuthorized(it.message.username, it.message.userId) }
             .autoDisposable(this.scope())
             .subscribe(JoinLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
 
@@ -144,13 +165,6 @@ class MainActivity : AppCompatActivity() {
             .throttleFirst(5, SECONDS, Schedulers.computation())
             .autoDisposable(this.scope())
             .subscribe(ScoreUseCase(kickprotocol, lobbyViewModel, callback, gameRepository))
-    }
-
-    private fun subscribeToRxJavaErrors() {
-        RxJavaPlugins.setErrorHandler {
-            Log.i("Error in Activity", it.cause?.message)
-            it.cause?.message?.let { it1 -> Snackbar.make(this.findViewById(android.R.id.content), it1, 5000).show() }
-        }
     }
 
     private fun showLobbyFragment() {
