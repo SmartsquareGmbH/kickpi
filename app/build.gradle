@@ -52,7 +52,7 @@ dependencies {
     compileOnly "com.google.android.things:androidthings:$androidThingsVersion"
     implementation "com.google.android.gms:play-services-nearby:$nearbyVersion"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$retrofitRxJavaAdapterVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$gsonConverterVersion"
     implementation "com.squareup.moshi:moshi:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"

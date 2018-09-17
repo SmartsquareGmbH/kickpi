@@ -14,7 +14,6 @@ buildscript {
         kotterknifeVersion = "1.1"
         nearbyVersion = "15.0.1"
         retrofitVersion = "2.4.0"
-        retrofitRxJavaAdapterVersion = "1.0.0"
         moshiVersion = "1.6.0"
         gsonConverterVersion = "2.1.0"
         kickprotocolVersion = "5332e8f84b"
