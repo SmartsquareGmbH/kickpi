@@ -140,7 +140,10 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
             .filter { it is Disconnected }
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
-            .subscribe { Snackbar.make(root, "${it.endpointId} disconnected", SNACKBAR_DURATION_IN_MS).show() }
+            .subscribe {
+                val user = endpoints.getIfAuthorized(it.endpointId)?: it.endpointId
+                Snackbar.make(root, "${user} disconnected", SNACKBAR_DURATION_IN_MS).show()
+            }
 
         kickprotocol.createGameMessageEvents
             .subscribeOn(Schedulers.io())
@@ -182,7 +185,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
 
     private fun showLobbyFragment() {
         with(supportFragmentManager.beginTransaction()) {
-            add(R.id.fragmentcontainer, LobbyFragment()).also { commitNow() }
+            replace(R.id.fragmentcontainer, LobbyFragment()).also { commitNow() }
         }
     }
 
