@@ -7,7 +7,10 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import de.smartsquare.kickpi.R
 import de.smartsquare.kickpi.domain.LobbyViewModel
@@ -22,6 +25,13 @@ class MatchmakingFragment : Fragment() {
     private val secondPlayerOfLeftTeam by bindView<TextView>(R.id.secondPlayerLeft)
     private val firstPlayerOfRightTeam by bindView<TextView>(R.id.firstPlayerRight)
     private val secondPlayerOfRightTeam by bindView<TextView>(R.id.secondPlayerRight)
+
+
+    private val crownForFirstPlayerLeft by bindView<ImageView>(R.id.crownFirstPlayerLeft)
+    private val crownForSecondPlayerLeft by bindView<ImageView>(R.id.crownSecondPlayerLeft)
+    private val crownForFirstPlayerRight by bindView<ImageView>(R.id.crownFirstPlayerRight)
+    private val crownForSecondPlayerRight by bindView<ImageView>(R.id.crownSecondPlayerRight)
+
     private val connectionCount by bindView<TextView>(R.id.connectionCount)
 
     override fun onCreateView(
@@ -33,21 +43,35 @@ class MatchmakingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val updateUIOnTeamUpdate = Observer<List<String>> { _ ->
-            lobbyViewModel.leftTeam.value.getOrElse(0) { "" }.also(firstPlayerOfLeftTeam::setText)
-            lobbyViewModel.leftTeam.value.getOrElse(1) { "" }.also(secondPlayerOfLeftTeam::setText)
+        lobbyViewModel.rightTeam.observe(this, Observer {
             lobbyViewModel.rightTeam.value.getOrElse(0) { "" }.also(firstPlayerOfRightTeam::setText)
             lobbyViewModel.rightTeam.value.getOrElse(1) { "" }.also(secondPlayerOfRightTeam::setText)
 
-            listOf(firstPlayerOfLeftTeam, secondPlayerOfLeftTeam, firstPlayerOfRightTeam, secondPlayerOfRightTeam)
-                .forEach {
-                    it.typeface = if (lobbyViewModel.owner.value == it.text) DEFAULT_BOLD else DEFAULT
-                }
+            showConnectionCount()
+            showLobbyOwner()
+        })
 
-            connectionCount.text = (lobbyViewModel.leftTeam.value.size + lobbyViewModel.rightTeam.value.size).toString()
+        lobbyViewModel.leftTeam.observe(this, Observer {
+            lobbyViewModel.leftTeam.value.getOrElse(0) { "" }.also(firstPlayerOfLeftTeam::setText)
+            lobbyViewModel.leftTeam.value.getOrElse(1) { "" }.also(secondPlayerOfLeftTeam::setText)
+
+            showConnectionCount()
+            showLobbyOwner()
+        })
+    }
+
+    private fun showConnectionCount() {
+        connectionCount.text = (lobbyViewModel.leftTeam.value.size + lobbyViewModel.rightTeam.value.size).toString()
+    }
+
+    private fun showLobbyOwner() {
+        mapOf(
+            firstPlayerOfLeftTeam.text to crownForFirstPlayerLeft,
+            secondPlayerOfLeftTeam.text to crownForSecondPlayerLeft,
+            firstPlayerOfRightTeam.text to crownForFirstPlayerRight,
+            secondPlayerOfRightTeam.text to crownForSecondPlayerRight
+        ).forEach { name, crown ->
+            crown.visibility = if (name == lobbyViewModel.owner.value) VISIBLE else INVISIBLE
         }
-
-        lobbyViewModel.rightTeam.observe(this, updateUIOnTeamUpdate)
-        lobbyViewModel.leftTeam.observe(this, updateUIOnTeamUpdate)
     }
 }

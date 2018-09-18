@@ -29,8 +29,8 @@ class LobbyViewModel : ViewModel() {
         }
 
         this.state.value = Matchmaking
-        this.leftTeam.value = listOf(lobbyOwner)
         this.owner.value = lobbyOwner
+        this.leftTeam.value = listOf(lobbyOwner)
         this.name.value = lobbyName
     }
 
