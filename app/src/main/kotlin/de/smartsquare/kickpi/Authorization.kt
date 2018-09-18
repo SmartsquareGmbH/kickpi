@@ -22,7 +22,6 @@ class EndpointStore {
     fun getIfAuthorized(endpointId: String) = endpoints[endpointId]
 }
 
-
 interface AuthorizationRepository {
 
     @POST("authorization")
@@ -32,7 +31,7 @@ interface AuthorizationRepository {
 @JsonClass(generateAdapter = true)
 data class Credentials(val deviceId: String, val name: String)
 
-inline fun Observable<MessageEvent.Message<JoinLobbyMessage>>.filterAuthenticatedJoinLobbyMessages(
+inline fun Observable<MessageEvent.Message<JoinLobbyMessage>>.filterAuthenticatedJoinGameMessages(
     authorizationRepository: AuthorizationRepository
 ): Observable<MessageEvent.Message<JoinLobbyMessage>> = this
     .flatMapSingle { event ->

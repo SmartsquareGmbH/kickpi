@@ -1,8 +1,6 @@
 package de.smartsquare.kickpi.matchmaking
 
 import android.arch.lifecycle.Observer
-import android.graphics.Typeface.DEFAULT
-import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -25,7 +23,6 @@ class MatchmakingFragment : Fragment() {
     private val secondPlayerOfLeftTeam by bindView<TextView>(R.id.secondPlayerLeft)
     private val firstPlayerOfRightTeam by bindView<TextView>(R.id.firstPlayerRight)
     private val secondPlayerOfRightTeam by bindView<TextView>(R.id.secondPlayerRight)
-
 
     private val crownForFirstPlayerLeft by bindView<ImageView>(R.id.crownFirstPlayerLeft)
     private val crownForSecondPlayerLeft by bindView<ImageView>(R.id.crownSecondPlayerLeft)

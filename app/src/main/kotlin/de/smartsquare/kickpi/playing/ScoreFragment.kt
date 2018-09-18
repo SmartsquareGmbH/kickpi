@@ -33,8 +33,12 @@ class ScoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lobbyViewModel.scoreLeft.observe(this, Observer { it?.let(Int::toString).also(leftScore::setText) })
-        lobbyViewModel.scoreRight.observe(this, Observer { it?.let(Int::toString).also(rightScore::setText) })
+        lobbyViewModel.scoreLeft.observe(this, Observer {
+            it?.let(Int::toString)?.also(leftScore::setText)
+        })
+        lobbyViewModel.scoreRight.observe(this, Observer {
+            it?.let(Int::toString)?.also(rightScore::setText)
+        })
 
         lobbyViewModel.leftTeam.value.getOrElse(0) { "" }.also(firstPlayerOfLeftTeam::setText)
         lobbyViewModel.leftTeam.value.getOrElse(1) { "" }.also(secondPlayerOfLeftTeam::setText)

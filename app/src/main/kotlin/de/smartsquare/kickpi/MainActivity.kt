@@ -141,8 +141,8 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe {
-                val user = endpoints.getIfAuthorized(it.endpointId)?: it.endpointId
-                Snackbar.make(root, "${user} disconnected", SNACKBAR_DURATION_IN_MS).show()
+                val user = endpoints.getIfAuthorized(it.endpointId) ?: it.endpointId
+                Snackbar.make(root, "$user disconnected", SNACKBAR_DURATION_IN_MS).show()
             }
 
         kickprotocol.createGameMessageEvents
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity(), AnkoLogger {
         kickprotocol.joinLobbyMessageEvents
             .subscribeOn(Schedulers.io())
             .filterMessages()
-            .filterAuthenticatedJoinLobbyMessages(authorizationRepository)
+            .filterAuthenticatedJoinGameMessages(authorizationRepository)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe(JoinLobbyUseCase(kickprotocol, endpoints, lobbyViewModel))
