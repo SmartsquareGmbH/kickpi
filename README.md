@@ -29,3 +29,4 @@ _Note: The kickchain currently supports only games which ended up with one team 
 :link: [Kickchain](https://github.com/smartsquare/kickchain)
 :left_right_arrow: [Kickway](https://github.com/SmartsquareGmbH/kickway)
 :iphone: [Android App](https://github.com/SmartsquareGmbH/kickdroid)
+:books: [Android Things Documentation](https://developer.android.com/docs/)
