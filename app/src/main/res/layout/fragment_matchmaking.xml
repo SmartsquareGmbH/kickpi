@@ -10,7 +10,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
-        android:id="@+id/crownFirstPlayerLeft"
+        android:id="@+id/crownFirstPlayerRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -24,7 +24,7 @@
         app:layout_constraintVertical_bias="0.49" />
 
     <ImageView
-        android:id="@+id/crownSecondPlayerRight2"
+        android:id="@+id/crownSecondPlayerRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
