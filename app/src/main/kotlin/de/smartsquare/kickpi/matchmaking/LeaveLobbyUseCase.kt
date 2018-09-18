@@ -28,9 +28,7 @@ class LeaveLobbyUseCase(
                     else -> MatchmakingMessage(lobby.toKickprotocolLobby())
                 }
             }
-            ?.also {
-                kickprotocol.broadcastAndAwait(it).subscribe()
-            }
+            ?.also { kickprotocol.broadcastAndAwait(it).subscribe() }
             ?.also { info { "${endpointStore.getIfAuthorized(message.endpointId)} left the game." } }
     }
 }

@@ -26,7 +26,6 @@ class JoinLobbyUseCase(
             .also { lobby.join(position = it, name = message.message.username) }
             .also { info { "${message.message.username} joined the game." } }
 
-        kickprotocol.broadcastAndAwait(MatchmakingMessage(lobby.toKickprotocolLobby()))
-            .subscribe()
+        kickprotocol.broadcastAndAwait(MatchmakingMessage(lobby.toKickprotocolLobby())).subscribe()
     }
 }

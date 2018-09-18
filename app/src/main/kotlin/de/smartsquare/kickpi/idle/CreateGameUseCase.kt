@@ -24,7 +24,6 @@ class CreateGameUseCase(
 
         info { "Game created by ${message.message.username}" }
 
-        kickprotocol.broadcastAndAwait(MatchmakingMessage(lobby.toKickprotocolLobby()))
-            .subscribe()
+        kickprotocol.broadcastAndAwait(MatchmakingMessage(lobby.toKickprotocolLobby())).subscribe()
     }
 }
