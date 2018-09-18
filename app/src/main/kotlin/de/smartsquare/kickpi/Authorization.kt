@@ -37,7 +37,7 @@ inline fun Observable<MessageEvent.Message<JoinLobbyMessage>>.filterAuthenticate
 ): Observable<MessageEvent.Message<JoinLobbyMessage>> = this
     .flatMapSingle { event ->
         authorizationRepository
-            .authorize(Credentials(event.endpointId, event.message.username))
+            .authorize(Credentials(event.message.userId, event.message.username))
             .map { true to event }
             .onErrorReturn { false to event }
     }
@@ -49,7 +49,7 @@ inline fun Observable<MessageEvent.Message<CreateGameMessage>>.filterAuthenticat
 ): Observable<MessageEvent.Message<CreateGameMessage>> = this
     .flatMapSingle { event ->
         authorizationRepository
-            .authorize(Credentials(event.endpointId, event.message.username))
+            .authorize(Credentials(event.message.userId, event.message.username))
             .map { true to event }
             .onErrorReturn { false to event }
     }
