@@ -1,1 +1,1 @@
-include ':app', ':gameserver'
+include ':app'
