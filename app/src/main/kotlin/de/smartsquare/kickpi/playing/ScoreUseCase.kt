@@ -21,10 +21,6 @@ class ScoreUseCase(
     private val gameRepository: GameRepository
 ) : Consumer<Unit>, AnkoLogger {
 
-    companion object {
-        private const val MILLISECONDS_BEFORE_END_GAME = 5000L
-    }
-
     override fun accept(unit: Unit?) {
         if (lobby currentlyIn Idle || lobby currentlyIn Matchmaking) {
             info { "Skipped a gpio edge because no match is in progress." }
@@ -37,14 +33,9 @@ class ScoreUseCase(
             lobby.scoreRight.value < SCORE_TO_FINISH_GAME.toInt()) {
             kickprotocol.broadcastAndAwait(PlayingMessage(lobby.toKickprotocolLobby())).subscribe()
         } else {
-            kickprotocol.broadcastAndAwait(PlayingMessage(lobby.toKickprotocolLobby())).subscribe()
-
+            kickprotocol.broadcastAndAwait(IdleMessage()).subscribe()
             gameRepository.save(lobby)
-
-            doAsync {
-                sleep(MILLISECONDS_BEFORE_END_GAME)
-                kickprotocol.broadcastAndAwait(IdleMessage()).subscribe()
-            }
+            lobby.reset()
         }
     }
 }

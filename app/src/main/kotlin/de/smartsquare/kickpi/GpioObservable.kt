@@ -29,9 +29,7 @@ class GpioObservable(private val gpio: Gpio) : Observable<Unit>() {
 
         private val unsubscribed = AtomicBoolean()
 
-        override fun isDisposed(): Boolean {
-            return unsubscribed.get()
-        }
+        override fun isDisposed(): Boolean = unsubscribed.get()
 
         override fun dispose() {
             if (unsubscribed.compareAndSet(false, true)) {

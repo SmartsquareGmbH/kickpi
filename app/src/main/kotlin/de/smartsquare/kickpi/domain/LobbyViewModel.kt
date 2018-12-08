@@ -102,5 +102,13 @@ class LobbyViewModel : ViewModel() {
         }
     }
 
+    fun reset() {
+        this.scoreRight.value = 0
+        this.scoreLeft.value = 0
+        this.leftTeam.value = emptyList()
+        this.rightTeam.value = emptyList()
+        this.owner.value = null
+    }
+
     infix fun currentlyIn(state: State) = this.state.value == state
 }
