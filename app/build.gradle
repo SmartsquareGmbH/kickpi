@@ -5,10 +5,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
-
-
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -83,11 +79,6 @@ dependencies {
     implementation "com.uber.autodispose:autodispose-android-ktx:$autodisposeVersion"
     implementation "com.mikepenz:community-material-typeface:$materialTypefaceVersion"
     implementation "android.arch.lifecycle:extensions:$androidLifecycleExtensionVersion"
-
-    // firebase
-    implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
-    implementation "com.crashlytics.sdk.android:crashlytics:$crashlyticsVersion"
-
 
     // testing
     testImplementation "io.mockk:mockk:$mockkVersion"
