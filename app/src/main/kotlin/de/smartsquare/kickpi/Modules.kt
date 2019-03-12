@@ -4,7 +4,6 @@ import android.app.Activity
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.things.pio.PeripheralManager
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.squareup.moshi.Moshi
 import de.smartsquare.kickpi.BuildConfig.KICKWAY_URL
 import de.smartsquare.kickpi.domain.LobbyViewModel
@@ -56,8 +55,4 @@ private val viewModels = module {
     viewModel { LobbyViewModel() }
 }
 
-private val crashlytics = module {
-    scope("activity") { FirebaseAnalytics.getInstance(get()) }
-}
-
-val modules = listOf(network, hardware, kickprotocol, domain, viewModels, crashlytics)
+val modules = listOf(network, hardware, kickprotocol, domain, viewModels)
